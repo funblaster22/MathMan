@@ -3,10 +3,7 @@
 #tools {
     display: flex;
     align-items: flex-end;
-    justify-content: flex-end;
-    position: fixed;
-    bottom: 0;
-    right: 0;
+    justify-content: center;
     height: 60px;  /* Height when active */
 }
 

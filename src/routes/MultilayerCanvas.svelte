@@ -56,8 +56,6 @@
     window.onresize = updateCanvasSize;
     updateCanvasSize();
 
-    console.log(layers);
-
     layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
     let pointerDown = false;
 
