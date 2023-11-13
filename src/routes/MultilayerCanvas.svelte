@@ -58,7 +58,7 @@
 
     console.log(layers);
 
-    layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d'));
+    layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
     let pointerDown = false;
 
     document.onpointerdown = ev => {
