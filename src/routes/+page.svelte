@@ -21,8 +21,9 @@
   function updateCanvasSize() {
     winWidth = window.innerWidth;
     winHeight = window.innerHeight;
-    requestIdleCallback(async () => {
-      const attempt = (await db.files.get(problemId)).attempts[attemptId];
+    requestAnimationFrame(async () => {
+      // !. is acceptable here b/c if I'm editing an attempt (this screen), then it must exist
+      const attempt = (await db.files.get(problemId))!.attempts[attemptId];
       layers[Tool.Draw].putImageData(attempt.work, 0, 0);
       layers[Tool.Correct].putImageData(attempt.error, 0, 0);
       layers[Tool.Question].putImageData(attempt.questions, 0, 0);
@@ -32,11 +33,13 @@
   function save() {
     const winDim = [0, 0, winWidth, winHeight];
     db.files.update(problemId, file => {
-      file.attempts[attemptId] = {
+      // !. is acceptable here
+      file.attempts![attemptId] = {
         date: new Date(),
         work: layers[Tool.Draw].getImageData(...winDim),
         error: layers[Tool.Correct].getImageData(...winDim),
         questions: layers[Tool.Question].getImageData(...winDim),
+        rois: file.attempts![attemptId].rois,
       }
     });
   }
