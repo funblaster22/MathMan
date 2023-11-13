@@ -20,6 +20,14 @@
 
 <MultilayerCanvas {selectedTool} {problemId} {attemptId} />
 <div id="grid">
+    <div>
+        <button>🏠</button> MA 162/midterm 1/8.1
+    </div>
+    <div class="text-right">
+        <button>🚩</button>
+        <button>Question 1</button>
+        <button>➡️</button>
+    </div>
     <div id="tools-container"><Tools selected={selectedTool} /></div>
     <div id="attempts-container" class="flex flex-col p-3 gap-3">
         {#each $attempts ?? [] as attempt, idx}
@@ -50,7 +58,7 @@
         width: 100vw;
         display: grid;
         padding-top: env(safe-area-inset-top);
-        grid-template-columns: 60px  auto var(--safe-area-right);
+        grid-template-columns: 50vw  auto var(--safe-area-right);
         grid-template-rows: var(--safe-area-top) auto var(--safe-area-bottom);
     }
 
