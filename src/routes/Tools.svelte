@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "./index.css";
+    import "./Tools.css";
     import Tool from "$lib/Tool";
     import type {Writable} from "svelte/store";
 
