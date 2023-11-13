@@ -13,7 +13,8 @@
     const auxCanvas = document.createElement("canvas");
     auxCanvas.width = layers[0].width;
     auxCanvas.height = layers[0].height;
-    dst.scale(size / auxCanvas.width, size / auxCanvas.height);
+    // TODO: replace 24 with line height (see HTML also)
+    dst.scale(size / auxCanvas.width, (size - 24) / auxCanvas.height);
 
     for (const imageData of layers) {
       auxCanvas.getContext("2d").putImageData(imageData, 0, 0);
@@ -29,6 +30,6 @@
 </script>
 
 <div class="text-center bg-gray-50 rounded-md">
-    <canvas bind:this={canvas} width={size} height={size}></canvas>
+    <canvas bind:this={canvas} width={size} height={size - 24}></canvas>
     Attempt {idx + 1}
 </div>

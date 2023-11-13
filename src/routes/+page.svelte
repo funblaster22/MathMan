@@ -20,8 +20,13 @@
 
 <MultilayerCanvas {selectedTool} {problemId} {attemptId} />
 <Tools selected={selectedTool} />
-<div class="fixed right-0 top-0 flex flex-row p-3">
+<div class="fixed right-0 top-0 flex flex-col p-3 gap-3">
     {#each $attempts ?? [] as attempt, idx}
         <AttemptPreview {attempt} {idx} />
     {/each}
+    <div class="text-center bg-gray-50 rounded-md">
+        <!-- TODO: replace w, h, leading w/ dynamic values -->
+        <div class="w-[100px] h-[76px] align-middle text-5xl leading-[1.65]">➕</div>
+        New Attempt
+    </div>
 </div>
