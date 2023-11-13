@@ -26,18 +26,18 @@ files {
 
 // Adapted from https://dexie.org/docs/Tutorial/Svelte
 
-enum RoiType {
+export enum RoiType {
   question,
   answer,
 }
 
-interface Roi {
+export interface Roi {
   x: number,
   y: number,
   type: RoiType,
 }
 
-interface Attempt {
+export interface Attempt {
   date: Date,
   work: ImageData,
   error: ImageData,
