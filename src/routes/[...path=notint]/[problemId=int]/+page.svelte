@@ -6,6 +6,8 @@
   import {page} from "$app/stores";
   import QuestionManagement from "./QuestionManagement.svelte";
   import Attempts from "./Attempts.svelte";
+  import {db, type File} from "$lib/db";
+  import {goto} from "$app/navigation";
 
   // Reactive vars
   const selectedTool = writable(Tool.None);
@@ -13,10 +15,26 @@
   const problemId = derived(page, $page => Number.parseInt($page.params.problemId));
   const attemptId = derived(page, $page => Number.parseInt($page.url.searchParams.get('attempt') ?? "1") - 1);
 
-  // TODO: rectify invalid states.
-  // Fetch entry for problemId
-  // If entry exists and params.path != entry.route, change URL to entry.route
-  // If entry doesn't exist, go back to file viewer (automatically making the file may be undesirable and collide w/ autoincr)
+  function enforceCorrectUrl(file: File | undefined) {
+    // rectify invalid states.
+    // Fetch entry for problemId
+    // If entry exists and params.path != entry.route, change URL to entry.route
+    if (file) {
+      const fileRoute = file.route.join("/");
+      if ($page.params.path != fileRoute) {
+        goto("/" + fileRoute + (fileRoute ? "/" : "") + $page.params.problemId);
+      }
+    } else {
+      // If entry doesn't exist, go back to file viewer (automatically making the file may be undesirable and collide w/ autoincr)
+      goto("/" + $page.params.path);
+    }
+  }
+
+  $: {
+    if (typeof window !== "undefined") {
+      db.files.get($problemId).then(enforceCorrectUrl);
+    }
+  }
 </script>
 
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
