@@ -84,10 +84,6 @@
   }
 
   onMount(() => {
-    // TODO: remove
-    window.newFile = () => {
-      db.files.add({attempts: [{}], parent: null, route: []});
-    }
     window.onresize = updateCanvasSize;
 
     layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
