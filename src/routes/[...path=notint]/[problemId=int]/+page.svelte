@@ -75,6 +75,7 @@
 
     #grid > * {
         /* This is important b/c it allows drawing on the canvas underneath & selecting UI elements */
+        /* TODO: slight consequence of this is that drawing over UI isn't tracked (pen already down) */
         pointer-events: all;
     }
 
