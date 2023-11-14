@@ -1,24 +1,30 @@
 <script lang="ts">
-  import {writable} from "svelte/store";
+  import {derived, writable} from "svelte/store";
   import Tool from "$lib/Tool";
   import Tools from "./Tools.svelte";
   import MultilayerCanvas from "./MultilayerCanvas.svelte";
   import {db} from "$lib/db";
   import {liveQuery} from "dexie";
   import AttemptPreview from "$lib/AttemptPreview.svelte";
+  import {page} from "$app/stores";
 
   // Reactive vars
   const selectedTool = writable(Tool.None);
 
-  const problemId = 2;
-  const attemptId = 0;
+  const problemId = derived(page, $page => Number.parseInt($page.params.problemId));
+  const attemptId = derived(page, $page => Number.parseInt($page.url.searchParams.get('attempt') ?? "0"));
+
+  // TODO: rectify invalid states.
+  // Fetch entry for problemId
+  // If entry exists and params.path != entry.route, change URL to entry.route
+  // If entry doesn't exist, go back to file viewer (automatically making the file may be undesirable and collide w/ autoincr)
 
   const attempts = liveQuery(
-    () => db.files.get(problemId).then(problem => problem!.attempts)
+    () => db.files.get($problemId).then(problem => problem!.attempts)
   );
 </script>
 
-<MultilayerCanvas {selectedTool} {problemId} {attemptId} />
+<MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div>
         <button>🏠</button> MA 162/midterm 1/8.1
