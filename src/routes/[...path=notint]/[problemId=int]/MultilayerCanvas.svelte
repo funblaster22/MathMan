@@ -55,8 +55,10 @@
     });
   }
 
+  const isDarkMode = typeof window === "undefined" ? false : window.matchMedia('(prefers-color-scheme: dark)').matches;
   const colors = {
-    [Tool.Draw]: "black",
+    // TODO: since color is baked into canvas, if user ever switches color scheme, they're screwed
+    [Tool.Draw]: isDarkMode ? "white" : "black",
     [Tool.Correct]: "red",
     [Tool.Question]: "blue",
   } as const;
