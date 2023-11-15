@@ -21,7 +21,7 @@
     // If entry exists and params.path != entry.route, change URL to file.route
     if (file) {
       const fileRoute = file.route.slice(0, -1).join("/");
-      if ($page.params.path != fileRoute) {
+      if ("/" + $page.params.path !== fileRoute) {
         goto(fileRoute + $page.params.problemId);
       }
     } else {
@@ -40,6 +40,7 @@
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div>
+        <!-- TODO: this should only go up 1 level, but it goes to root -->
         <button on:click={() => goto("..")}>🏠</button>
         {#each $page.params.path.split("/") as folder}
             <!-- TODO: each folder bring you back to the explorer -->
