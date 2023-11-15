@@ -18,11 +18,11 @@
   function enforceCorrectUrl(file: File | undefined) {
     // rectify invalid states.
     // Fetch entry for problemId
-    // If entry exists and params.path != entry.route, change URL to entry.route
+    // If entry exists and params.path != entry.route, change URL to file.route
     if (file) {
-      const fileRoute = file.route.join("/");
+      const fileRoute = file.route.slice(0, -1).join("/");
       if ($page.params.path != fileRoute) {
-        goto("/" + fileRoute + (fileRoute ? "/" : "") + $page.params.problemId);
+        goto(fileRoute + $page.params.problemId);
       }
     } else {
       // If entry doesn't exist, go back to file viewer (automatically making the file may be undesirable and collide w/ autoincr)
@@ -40,10 +40,14 @@
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div>
-        <button>🏠</button> MA 162/midterm 1/8.1
+        <button>🏠</button>
+        {#each $page.params.path.split("/") as folder}
+            <!-- TODO: each folder bring you back to the explorer -->
+            /{folder}
+        {/each}
     </div>
     <div class="text-right">
-        <QuestionManagement />
+        <QuestionManagement parentFolder={$page.params.path.split("/").at(-1)} />
     </div>
     <div id="tools-container"><Tools selected={selectedTool} /></div>
     <div id="attempts-container" class="flex flex-col p-3 gap-3">

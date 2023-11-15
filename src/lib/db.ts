@@ -48,9 +48,10 @@ export interface Attempt {
 export interface File {
   // Autoincrementing primary key
   id?: number;
-  // Useful for rendering file view. TODO: if possible to use `route` to only show direct descendants, omit this (doubtful)
+  // Useful for rendering file view. MUST NOT be null b/c indexeddb can't query it then
   parent: string;
-  // Full folder path to file. Useful for querying all recursive folder contents. Example: [mat, 10.8, homework]
+  // Full folder path to file. Useful for querying all recursive folder contents. Example: ["", mat, 10.8, homework]
+  // Gaurenteed to have at least 2 items (root "" and the filename)
   route: string[];
   // Not indexed. Only exists for files, not folders
   attempts?: Attempt[],
