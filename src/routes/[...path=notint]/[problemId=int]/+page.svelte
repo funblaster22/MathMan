@@ -73,7 +73,7 @@
         width: 100vw;
         display: grid;
         padding-top: env(safe-area-inset-top);
-        grid-template-columns: 50vw  auto var(--safe-area-right);
+        grid-template-columns: 50vw  auto min-content;
         grid-template-rows: var(--safe-area-top) auto var(--safe-area-bottom);
     }
 
@@ -90,6 +90,8 @@
 
     #attempts-container {
         grid-column: 3 / 4;
-        grid-row: 1 / 3;
+        grid-row: 1 / 4;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 </style>

@@ -18,12 +18,13 @@
   }
 </script>
 
+<!-- TODO: I'm not sure why layout shifts when scrollbar present -->
 {#each $attempts ?? [] as attempt, idx}
     <div on:click={() => goto("?attempt=" + (idx + 1))}>
         <AttemptPreview {attempt} {idx} />
     </div>
 {/each}
-<div class="text-center bg-gray-50 rounded-md" on:click={newAttempt}>
+<div class="text-center bg-gray-50 rounded-md w-[100px]" on:click={newAttempt}>
     <!-- TODO: replace w, h, leading w/ dynamic values -->
     <div class="w-[100px] h-[76px] align-middle text-5xl leading-[1.65]">➕</div>
     New Attempt
