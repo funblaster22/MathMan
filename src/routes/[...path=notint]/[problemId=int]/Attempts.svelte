@@ -11,9 +11,15 @@
   );
 
   function newAttempt() {
+    const blank = document.createElement("canvas").getContext("2d").getImageData(0, 0, 1, 1);
     db.files.update(problemId, file => {
-      // It's ok Attempt is empty, it'll get overwritten soon
-      goto("?attempt=" + file.attempts!.push({} as Attempt))
+      goto("?attempt=" + file.attempts!.push({
+        date: new Date(),
+        work: blank,
+        error: blank,
+        questions: blank,
+        rois: [],
+      }))
     });
   }
 </script>
