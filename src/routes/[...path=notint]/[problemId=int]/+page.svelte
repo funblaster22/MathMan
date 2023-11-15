@@ -40,7 +40,7 @@
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div>
-        <button>🏠</button>
+        <button on:click={() => goto("..")}>🏠</button>
         {#each $page.params.path.split("/") as folder}
             <!-- TODO: each folder bring you back to the explorer -->
             /{folder}

@@ -2,6 +2,7 @@
   import { page } from '$app/stores'
   import {onMount} from "svelte";
   import {db} from "$lib/db";
+  import newBlankAttempt from "$lib/newBlankAttempt";
 
   $: console.log($page);
 
@@ -12,7 +13,7 @@
         console.error("Need at least filename")
         return;
       }
-      db.files.add({attempts: [{}], parent: route.at(-2) ?? "", route: ["", ...route]});
+      db.files.add({attempts: [newBlankAttempt()], parent: route.at(-2) ?? "", route: ["", ...route]});
     }
   });
 </script>

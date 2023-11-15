@@ -2,7 +2,8 @@
   import {goto} from "$app/navigation";
   import AttemptPreview from "$lib/AttemptPreview.svelte";
   import {liveQuery} from "dexie";
-  import {type Attempt, db} from "$lib/db";
+  import {db} from "$lib/db";
+  import newBlankAttempt from "$lib/newBlankAttempt";
 
   export let problemId: number;
 
@@ -11,15 +12,8 @@
   );
 
   function newAttempt() {
-    const blank = document.createElement("canvas").getContext("2d").getImageData(0, 0, 1, 1);
     db.files.update(problemId, file => {
-      goto("?attempt=" + file.attempts!.push({
-        date: new Date(),
-        work: blank,
-        error: blank,
-        questions: blank,
-        rois: [],
-      }))
+      goto("?attempt=" + file.attempts!.push(newBlankAttempt()))
     });
   }
 </script>
