@@ -6,7 +6,8 @@
   export let parentFolder: string;
 
   function changeQuestion(ev: Event) {
-    goto("4")
+    const newId = (ev.target as HTMLSelectElement).value;
+    goto(newId);
   }
 
   const questions = liveQuery(() =>
@@ -17,7 +18,7 @@
 <button>🚩</button>
 <select on:change={changeQuestion}>
     {#each $questions ?? [] as question}
-        <option name={question.id}>{question.route.at(-1)}</option>
+        <option value={question.id}>{question.route.at(-1)}</option>
     {/each}
 </select>
 <button>➡️</button>
