@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { page } from '$app/stores'
   import {onMount} from "svelte";
   import {db} from "$lib/db";
   import newBlankAttempt from "$lib/newBlankAttempt";
   import FileSidebar from "./FileSidebar.svelte";
+  import FileViewer from "./FileViewer.svelte";
 
   let fileStruct = {};
 
@@ -44,6 +44,26 @@
   });
 </script>
 
-<div>
-    <FileSidebar {fileStruct} />
+<div id="grid">
+    <div id="ribbon"></div>
+    <div id="folders"><FileSidebar {fileStruct} /></div>
+    <div id="files"><FileViewer /></div>
 </div>
+
+<style>
+    #grid {
+        height: 100vh;
+        width: 100vw;
+        max-width: 100vw !important;
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        grid-template-rows: 2em auto;
+    }
+
+    #ribbon { grid-area: 1 / 2 / 2 / 3; }
+
+    #folders { grid-area: 1 / 1 / 3 / 2; }
+
+    #files { grid-area: 2 / 2 / 3 / 3; }
+
+</style>

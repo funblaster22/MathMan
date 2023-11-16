@@ -20,9 +20,9 @@
     // Fetch entry for problemId
     // If entry exists and params.path != entry.route, change URL to file.route
     if (file) {
-      const fileRoute = file.route.slice(0, -1).join("/");
+      const fileRoute = file.route.join("/");
       if ("/" + $page.params.path !== fileRoute) {
-        goto(fileRoute + $page.params.problemId);
+        goto(fileRoute + "/" + $page.params.problemId);
       }
     } else {
       // If entry doesn't exist, go back to file viewer (automatically making the file may be undesirable and collide w/ autoincr)
@@ -74,7 +74,7 @@
         width: 100vw;
         display: grid;
         padding-top: env(safe-area-inset-top);
-        grid-template-columns: 50vw  auto min-content;
+        grid-template-columns: 50vw auto min-content;
         grid-template-rows: var(--safe-area-top) auto var(--safe-area-bottom);
     }
 

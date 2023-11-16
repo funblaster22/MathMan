@@ -16,6 +16,7 @@
 </script>
 
 <button>🚩</button>
+<!-- TODO: this for some reason only properly loads on reload -->
 <select on:change={changeQuestion}>
     {#each $questions ?? [] as question}
         <option value={question.id}>{question.name}</option>

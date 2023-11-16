@@ -48,13 +48,15 @@ export interface Attempt {
 export interface File {
   // Autoincrementing primary key
   id?: number;
-  // Useful for rendering file view. MUST NOT be null b/c indexeddb can't query it then
+  // Useful for rendering file view. MUST NOT be null b/c indexeddb can't query it then TODO: remove this & query full route instead (might have issue if 2 folders have same name)
   parent: string;
-  // Full folder path to file. Useful for querying all recursive folder contents. Example: ["", mat, 10.8, homework]
-  // Gaurenteed to have at least 2 items (root "" and the filename)
+  // Full folder path to file. Useful for querying all recursive folder contents. Example: ["", mat, 10.8]
+  // Gaunted to have at least 1 item (root "")
   route: string[];
   // Not indexed. Only exists for files, not folders
-  attempts?: Attempt[],
+  attempts: Attempt[],
+  // Filename (ex: "problem 1")
+  name: string,
 }
 
 export class MyDexie extends Dexie {
