@@ -3,6 +3,7 @@
   import {onMount} from "svelte";
   import {db} from "$lib/db";
   import newBlankAttempt from "$lib/newBlankAttempt";
+  import FileSidebar from "./FileSidebar.svelte";
 
   let fileStruct = {};
 
@@ -43,4 +44,6 @@
   });
 </script>
 
-<div>You've reached dir!</div>
+<div>
+    <FileSidebar {fileStruct} />
+</div>
