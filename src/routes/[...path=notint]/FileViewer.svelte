@@ -7,7 +7,8 @@
     let files = readable([]) as Observable<Array<File>>;
     // Ignore, it is the right type
     $: files = liveQuery(() =>
-      db.files.where({"[route]": [["", ...$page.params.path.split("/")]]}).toArray()
+      // Conditional check on $page.params.path b/c "" is duplicated on empty route
+      db.files.where({"[route]": [["", ...($page.params.path ? $page.params.path.split("/") : [])]]}).toArray()
     );
 </script>
 
