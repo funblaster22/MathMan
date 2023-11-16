@@ -8,6 +8,8 @@
   import Attempts from "./Attempts.svelte";
   import {db, type File} from "$lib/db";
   import {goto} from "$app/navigation";
+  import {base} from "$app/paths";
+  import path from "path";
 
   // Reactive vars
   const selectedTool = writable(Tool.None);
@@ -22,11 +24,11 @@
     if (file) {
       const fileRoute = file.route.join("/");
       if ("/" + $page.params.path !== fileRoute) {
-        goto(fileRoute + "/" + $page.params.problemId);
+        goto(path.join("/", base, fileRoute, $page.params.problemId));
       }
     } else {
       // If entry doesn't exist, go back to file viewer (automatically making the file may be undesirable and collide w/ autoincr)
-      goto("/" + $page.params.path);
+      goto(path.join("/", base, $page.params.path));
     }
   }
 

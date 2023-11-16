@@ -10,11 +10,13 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "dependencies": {
-    "dexie": "4.0.1-beta.1"
+    "dexie": "4.0.1-beta.1",
+    "path-browserify": "^1.0.1"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.20.4",
+    "@types/node": "^20.9.1",
     "daisyui": "^3.1.6",
     "postcss": "^8.4.24",
     "postcss-load-config": "^4.0.1",
