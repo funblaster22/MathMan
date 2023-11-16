@@ -65,8 +65,12 @@ export class MyDexie extends Dexie {
   constructor() {
     super('localDatabase');
     // Docs: https://dexie.org/docs/Version/Version.stores()#schema-syntax
-    this.version(1).stores({
-      files: '++id, parent, *route' // Primary key and indexed props
+    this.version(15).stores({
+      // Primary key and indexed props
+      // [route] creates a multikey, but I'm using it as an alias for route (hacky, need to flatten(1))
+      // Useful for constructing the file tree
+      // TODO: maybe contribute upstream easier way to alias. See https://github.com/dexie/Dexie.js/blob/master/src/classes/version/schema-helpers.ts#L388
+      files: '++id, parent, *route, [route]',
     });
   }
 }

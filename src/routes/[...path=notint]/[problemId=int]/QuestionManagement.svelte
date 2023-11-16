@@ -18,7 +18,7 @@
 <button>🚩</button>
 <select on:change={changeQuestion}>
     {#each $questions ?? [] as question}
-        <option value={question.id}>{question.route.at(-1)}</option>
+        <option value={question.id}>{question.name}</option>
     {/each}
 </select>
 <button>➡️</button>
