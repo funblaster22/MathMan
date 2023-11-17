@@ -3,7 +3,7 @@
     import {liveQuery, type Observable} from "dexie";
     import {db} from "$lib/db";
     import {page} from "$app/stores";
-    import path from "path-browserify";
+    import path from "path";
     import {base} from "$app/paths";
 
     let files = readable([]) as Observable<Array<File>>;

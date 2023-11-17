@@ -46,8 +46,8 @@
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div id="breadcrumbs">
-        <!-- TODO: this should only go up 1 level, but it goes to root -->
-        <button on:click={() => goto("..")}>🏠</button>
+        <!-- Remember, $page.path does not include the id, so no extra work is needed -->
+        <a href={path.join("/", base, $page.params.path)}>🏠</a>
         {#each $page.params.path.split("/") as folder}
             <!-- TODO: each folder bring you back to the explorer -->
             /{folder}
