@@ -2,6 +2,8 @@
     import "./Tools.css";
     import Tool from "$lib/Tool";
     import type {Writable} from "svelte/store";
+    import markerUrl from "$lib/img/marker.png"
+    import eraserUrl from "$lib/img/eraser.png"
 
     export let selected: Writable<Tool>;
 
@@ -24,15 +26,15 @@
 
 <div id="tools">
     <div style="width: 30px; filter: grayscale(1);" on:click={launchTool} data-tool={Tool.Draw}>
-        <img src="/marker.png" title="Your work" draggable="false" />
+        <img src={markerUrl} title="Your work" draggable="false" />
     </div>
     <div style="width: 30px; filter: hue-rotate(136deg);" on:click={launchTool} data-tool={Tool.Correct}>
-        <img src="/marker.png" title="Correct" draggable="false" />
+        <img src={markerUrl} title="Correct" draggable="false" />
     </div>
     <div style="width: 30px" on:click={launchTool} data-tool={Tool.Question}>
-        <img src="/marker.png" title="Question" draggable="false" />
+        <img src={markerUrl} title="Question" draggable="false" />
     </div>
     <div style="width: 30px" on:click={launchTool} data-tool={Tool.Erase}>
-        <img src="/eraser.png" title="Eraser" draggable="false" />
+        <img src={eraserUrl} title="Eraser" draggable="false" />
     </div>
 </div>
