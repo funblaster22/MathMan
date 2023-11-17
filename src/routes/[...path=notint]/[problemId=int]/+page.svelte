@@ -41,7 +41,7 @@
 
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
-    <div>
+    <div id="breadcrumbs">
         <!-- TODO: this should only go up 1 level, but it goes to root -->
         <button on:click={() => goto("..")}>🏠</button>
         {#each $page.params.path.split("/") as folder}
@@ -49,7 +49,7 @@
             /{folder}
         {/each}
     </div>
-    <div class="text-right">
+    <div id="question-management" class="text-right">
         <QuestionManagement parentFolder={$page.params.path.split("/").at(-1)} />
     </div>
     <div id="tools-container"><Tools selected={selectedTool} /></div>
@@ -72,7 +72,7 @@
 
         pointer-events: none;
         position: fixed;
-        height: 100vh;
+        height: 100dvh;
         width: 100vw;
         display: grid;
         padding-top: env(safe-area-inset-top);
@@ -80,9 +80,11 @@
         grid-template-rows: var(--safe-area-top) auto var(--safe-area-bottom);
     }
 
-    #grid > * {
+    #tools-container > :global(* > *),
+    #attempts-container > :global(*),
+    #question-management > :global(*),
+    #breadcrumbs > :global(*) {
         /* This is important b/c it allows drawing on the canvas underneath & selecting UI elements */
-        /* TODO: slight consequence of this is that drawing over UI isn't tracked (pen already down) */
         pointer-events: all;
     }
 

@@ -72,8 +72,10 @@
     ctx.moveTo(ev.clientX, ev.clientY);
   }
   const onpointerup = () => {
+    // Check needed b/c event fired on document level (might be clicking UI, not drawing)
+    if (pointerDown)
+        save();
     pointerDown = false;
-    save();
   }
   const onpointermove = ev => {
     if (pointerDown) {
@@ -85,6 +87,8 @@
 
   onMount(() => {
     window.onresize = updateCanvasSize;
+    document.onpointermove = onpointermove;
+    document.onpointerup = onpointerup;
 
     layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
   });
@@ -92,9 +96,10 @@
 
 <canvas bind:this={layers[Tool.Draw]} width={winWidth} height={winHeight}></canvas>
 <canvas bind:this={layers[Tool.Correct]} width={winWidth} height={winHeight}></canvas>
-<!-- Binding events here as opposed to document prevents wierd propagation bugs-->
+<!-- Bind pointerdown here ensures you clicked canvas as opposed to UI.
+Allowed to finish or draw over UI, so pointermove & pointerup bound at document level -->
 <canvas bind:this={layers[Tool.Question]} width={winWidth} height={winHeight}
-        on:pointerdown={onpointerdown} on:pointerup={onpointerup} on:pointermove={onpointermove}></canvas>
+        on:pointerdown={onpointerdown}></canvas>
 
 <style>
     canvas {
