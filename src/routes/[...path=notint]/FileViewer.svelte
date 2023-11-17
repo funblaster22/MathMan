@@ -14,6 +14,7 @@
 
 <div class="flex flex-wrap gap-5">
     {#each $files as file (file.id)}
+        <!-- TODO: inconsistent behavior: sometimes goes directly to question, overtimes goes ../question (seems to occur when client renderer in control -->
         <a class="text-center" href={file.id}>
             <div class="w-12 h-12 bg-red-500 m-auto"></div>
             <div>{file.name}</div>

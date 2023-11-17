@@ -25,8 +25,7 @@
 
   function newFile (...route) {
     if (route.length < 1) {
-      console.error("Need at least filename")
-      return;
+      throw "Need at least filename";
     }
     db.files.add({
       attempts: [newBlankAttempt()],
@@ -45,7 +44,9 @@
 </script>
 
 <div id="grid">
-    <div id="ribbon"></div>
+    <div id="ribbon" class="text-right">
+        <button on:click={() => newFile(...prompt("Enter path of file to create").split("/"))}>➕ file</button>
+    </div>
     <div id="folders"><FileSidebar {fileStruct} /></div>
     <div id="files"><FileViewer /></div>
 </div>
