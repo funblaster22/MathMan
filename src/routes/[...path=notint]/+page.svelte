@@ -43,6 +43,10 @@
   });
 </script>
 
+<svelte:head>
+    <title>MathMan Browse</title>
+</svelte:head>
+
 <div id="grid">
     <div id="ribbon" class="text-right">
         <button on:click={() => newFile(...prompt("Enter path of file to create").split("/"))}>➕ file</button>

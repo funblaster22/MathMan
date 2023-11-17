@@ -39,6 +39,10 @@
   }
 </script>
 
+<svelte:head>
+    <title>MathMan Draw</title>
+</svelte:head>
+
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div id="breadcrumbs">
