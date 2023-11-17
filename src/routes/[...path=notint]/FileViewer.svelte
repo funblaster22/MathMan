@@ -3,6 +3,8 @@
     import {liveQuery, type Observable} from "dexie";
     import {db} from "$lib/db";
     import {page} from "$app/stores";
+    import path from "path-browserify";
+    import {base} from "$app/paths";
 
     let files = readable([]) as Observable<Array<File>>;
     // Ignore, it is the right type
@@ -15,7 +17,7 @@
 <div class="flex flex-wrap gap-5">
     {#each $files as file (file.id)}
         <!-- TODO: inconsistent behavior: sometimes goes directly to question, overtimes goes ../question (seems to occur when client renderer in control -->
-        <a class="text-center" href={file.id}>
+        <a class="text-center w-[5rem]" href={path.join("/", base, $page.params.path, "" + file.id)}>
             <div class="w-12 h-12 bg-red-500 m-auto"></div>
             <div>{file.name}</div>
         </a>
