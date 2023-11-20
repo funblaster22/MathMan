@@ -36,11 +36,7 @@
 
     const imgData = context.getImageData(roiBox.x * scaleFactor, roiBox.y * scaleFactor, roiBox.width * scaleFactor, roiBox.height * scaleFactor);
 
-    db.files.update($page.params.problemId, {question: imgData}).then(() => history.back());
-
-    context.putImageData(imgData, 0, 0);
-    const data = canvas.toDataURL("image/png");
-    console.log(data);
+    db.files.update(Number.parseInt($page.params.problemId), {question: imgData}).then(() => history.back());
   }
 </script>
 

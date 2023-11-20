@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "dexie": "4.0.1-beta.1",
-    "path-browserify": "^1.0.1"
+    "path-browserify": "^1.0.1",
+    "svelte-moveable": "^0.44.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^2.0.3",

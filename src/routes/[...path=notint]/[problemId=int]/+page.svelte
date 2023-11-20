@@ -10,6 +10,7 @@
   import {goto} from "$app/navigation";
   import {base} from "$app/paths";
   import path from "path";
+  import ProblemViewer from "./ProblemViewer.svelte";
 
   // Reactive vars
   const selectedTool = writable(Tool.None);
@@ -43,6 +44,7 @@
     <title>MathMan Draw</title>
 </svelte:head>
 
+<ProblemViewer problemId={$problemId} />
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div id="breadcrumbs">
