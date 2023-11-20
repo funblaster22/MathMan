@@ -5,6 +5,7 @@
     align-items: flex-end;
     justify-content: center;
     height: 60px;  /* Height when active */
+    gap: 10px;
 }
 
 #tools > div {
@@ -12,7 +13,6 @@
     height: 30px;  /* Height when inactive */
     max-width: 200px;
     overflow: hidden;
-    margin-right: 10px;
 }
 
 #tools img {

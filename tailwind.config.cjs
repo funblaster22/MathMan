@@ -6,6 +6,9 @@ const config = {
 
   theme: {
     extend: {},
+    minWidth: {
+      12: '3rem',  // TODO: dynamically get 3rem
+    },
   },
 
   plugins: [daisyui],
