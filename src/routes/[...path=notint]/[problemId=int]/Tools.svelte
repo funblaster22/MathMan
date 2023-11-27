@@ -22,6 +22,7 @@
 </script>
 
 <div id="tools">
+    <SelectorTool />
     <a href={path.join("/", base, "camera", $page.params.problemId)}>
         📷
     </a>

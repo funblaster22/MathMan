@@ -3,7 +3,7 @@ enum Tool {
   Correct,
   Question,
   None,
-  Erase,
+  Select
 }
 
 export default Tool;
