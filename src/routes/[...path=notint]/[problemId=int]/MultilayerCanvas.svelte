@@ -8,6 +8,8 @@
   export let problemId: number;
   export let attemptId: number;
 
+  // TODO: I'm fearing at some point I'll have to rewrite MultilayerCanvas & db schema so each path is its own object w/ (x,y) position
+
   //#region Reactive vars
   let winWidth = 0;
   let winHeight = 0;
@@ -92,9 +94,9 @@
   }
 
   onMount(() => {
-    window.onresize = updateCanvasSize;
-    document.onpointermove = onpointermove;
-    document.onpointerup = onpointerup;
+    window.addEventListener("resize", updateCanvasSize);
+    document.addEventListener("pointermove", onpointermove);
+    document.addEventListener("pointerup", onpointerup);
 
     layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
   });
