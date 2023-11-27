@@ -1,5 +1,4 @@
 <script lang="ts">
-  import PopupTool from "$lib/tools/PopupTool.svelte";
   import Tool from "$lib/Tool";
   import type {Writable} from "svelte/store";
   import {getContext} from "svelte";
@@ -54,7 +53,7 @@
         Show Solution
     </button>
 {/if}
-<!-- A little upset about duplicating PopupTool, but it was _just_ different enough to warrent. -->
+<!-- A little upset about duplicating MarkerTool, but it was _just_ different enough to warrant. -->
 <div class="tool" style:height={isSelected ? "100%" : "30px"} on:pointerdown|stopPropagation={() => selection.set(isSelected ? Tool.None : selectedData)}>
     <div style="background-color: green">✅</div>
 </div>
