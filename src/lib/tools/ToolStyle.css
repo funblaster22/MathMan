@@ -1,0 +1,6 @@
+.tool {
+    width: 30px;  /* TODO: make this dynamic when on iPad vs computer */
+    height: 30px;  /* Height when inactive */
+    max-width: 200px;
+    overflow: hidden;
+}

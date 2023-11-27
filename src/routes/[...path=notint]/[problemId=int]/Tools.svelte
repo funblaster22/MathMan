@@ -9,13 +9,16 @@
     import SelectorTool from "$lib/tools/SelectorTool.svelte";
     import PopupTool from "$lib/tools/PopupTool.svelte";
     import {setContext} from "svelte";
+    import "$lib/tools/ToolStyle.css"
 
     export let selected: Writable<Tool>;
     setContext('selection', selected);
 
-    function launchEraser(ev: MouseEvent) {
-      // TODO: I'm thinking only erase current layer, but low priority
-      launchTool(ev);
+    let eraserSelected = false;
+
+    function toggleEraser(ev: MouseEvent) {
+      // TODO: only erase current layer
+      eraserSelected = !eraserSelected;
     }
 </script>
 
@@ -32,9 +35,9 @@
     <PopupTool selectedData={Tool.Question}>
         <img src={markerUrl} title="Question" draggable="false" />
     </PopupTool>
-    <PopupTool selectedData={Tool.Erase}>
+    <div class="tool" style:height={eraserSelected ? "100%" : "30px"} on:click={toggleEraser}>
         <img src={eraserUrl} title="Eraser" draggable="false" />
-    </PopupTool>
+    </div>
 </div>
 
 <style>
