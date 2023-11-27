@@ -13,8 +13,6 @@
     export let selected: Writable<Tool>;
     setContext('selection', selected);
 
-    let eraserSelected = false;
-
     function launchEraser(ev: MouseEvent) {
       // TODO: I'm thinking only erase current layer, but low priority
       launchTool(ev);
@@ -34,8 +32,9 @@
     <PopupTool selectedData={Tool.Question}>
         <img src={markerUrl} title="Question" draggable="false" />
     </PopupTool>
-    <input id="Tool-Erase" type='checkbox' bind:value={eraserSelected}/>
-    <label for="Tool-Erase"><img src={eraserUrl} title="Eraser" draggable="false" /></label>
+    <PopupTool selectedData={Tool.Erase}>
+        <img src={eraserUrl} title="Eraser" draggable="false" />
+    </PopupTool>
 </div>
 
 <style>
@@ -45,23 +44,6 @@
         justify-content: center;
         height: 60px;  /* Height when active */
         gap: 10px;
-    }
-
-    label {
-        width: 30px;  /* TODO: make this dynamic when on iPad vs computer */
-        height: 30px;  /* Height when inactive */
-        max-width: 200px;
-        overflow: hidden;
-    }
-
-    input:checked + label {
-        height: 100%;
-    }
-
-    input {
-        position: fixed;
-        opacity: 0;
-        pointer-events: none !important;
     }
 
     #tools img {
