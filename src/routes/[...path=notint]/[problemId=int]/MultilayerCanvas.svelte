@@ -1,7 +1,7 @@
 <script lang="ts">
   import {db} from "$lib/db";
   import Tool from "$lib/Tool";
-  import {onMount} from "svelte";
+  import {getContext, onMount} from "svelte";
   import type {Writable} from "svelte/store";
 
   export let selectedTool: Writable<Tool>;
@@ -12,6 +12,7 @@
   let winWidth = 0;
   let winHeight = 0;
   let pointerDown = false;
+  let eraserEnabled = getContext<Writable<boolean>>("eraserEnabled");
   //#endregion
 
   // This technically is fist initialized to CanvasElements, but is immediately changed in onMount.
@@ -64,10 +65,14 @@
   } as const;
 
   const onpointerdown = ev => {
-    if ($selectedTool == Tool.None) return;
+    // TODO: erase all layers if no color selected
+    if ($selectedTool >= Tool.None) return;
     const ctx = layers[$selectedTool];
     pointerDown = true;
     ctx.strokeStyle = colors[$selectedTool];
+    ctx.lineWidth = $eraserEnabled ? 20 : 1;
+    ctx.globalCompositeOperation = $eraserEnabled ? "destination-out" : "source-over";
+    // Path never closed, OK. Prevents undoing erase when new path
     ctx.beginPath();
     ctx.moveTo(ev.clientX, ev.clientY);
   }
@@ -76,6 +81,7 @@
     if (pointerDown)
         save();
     pointerDown = false;
+    // TODO: adjust ROI bounds after erasing
   }
   const onpointermove = ev => {
     if (pointerDown) {

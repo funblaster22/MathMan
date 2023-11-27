@@ -11,9 +11,13 @@
   import {base} from "$app/paths";
   import path from "path";
   import ProblemViewer from "./ProblemViewer.svelte";
+  import {setContext} from "svelte";
 
   // Reactive vars
   const selectedTool = writable(Tool.None);
+  const eraserEnabled = writable(false);
+
+  setContext("eraserEnabled", eraserEnabled);
 
   const problemId = derived(page, $page => Number.parseInt($page.params.problemId));
   const attemptId = derived(page, $page => Number.parseInt($page.url.searchParams.get('attempt') ?? "1") - 1);

@@ -8,17 +8,16 @@
     import {page} from "$app/stores";
     import SelectorTool from "$lib/tools/SelectorTool.svelte";
     import PopupTool from "$lib/tools/PopupTool.svelte";
-    import {setContext} from "svelte";
+    import {getContext, setContext} from "svelte";
     import "$lib/tools/ToolStyle.css"
 
     export let selected: Writable<Tool>;
     setContext('selection', selected);
 
-    let eraserSelected = false;
+    let eraserSelected = getContext<Writable<boolean>>("eraserEnabled");
 
     function toggleEraser(ev: MouseEvent) {
-      // TODO: only erase current layer
-      eraserSelected = !eraserSelected;
+      eraserSelected.set(!$eraserSelected);
     }
 </script>
 
@@ -35,7 +34,7 @@
     <PopupTool selectedData={Tool.Question}>
         <img src={markerUrl} title="Question" draggable="false" />
     </PopupTool>
-    <div class="tool" style:height={eraserSelected ? "100%" : "30px"} on:click={toggleEraser}>
+    <div class="tool" style:height={$eraserSelected ? "100%" : "30px"} on:click={toggleEraser}>
         <img src={eraserUrl} title="Eraser" draggable="false" />
     </div>
 </div>
