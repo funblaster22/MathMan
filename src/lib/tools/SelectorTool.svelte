@@ -10,8 +10,8 @@
   let isDrawing = false;
 
   // Store user input
-  let anchor: [number, number] = [0, 0];  // Usually top left
-  let workingEdge: [number, number] = [0, 0];  // Usually bottom right
+  let anchor: [number, number] = [];  // Usually top left
+  let workingEdge: [number, number] = [];  // Usually bottom right
 
   // Computed values for displaying bounding box
   let topLeftCorner;
@@ -44,14 +44,16 @@
   });
 </script>
 
-<button class="border text-center" style="position: fixed"
-     style:left={topLeftCorner[0] + "px"}
-     style:top={topLeftCorner[1] + "px"}
-     style:width={bottomRightCorner[0] - topLeftCorner[0] + "px"}
-     style:height={bottomRightCorner[1] - topLeftCorner[1] + "px"}
->
-    Show Solution
-</button>
+{#if topLeftCorner[1]}
+    <button class="border text-center" style="position: fixed"
+         style:left={topLeftCorner[0] + "px"}
+         style:top={topLeftCorner[1] + "px"}
+         style:width={bottomRightCorner[0] - topLeftCorner[0] + "px"}
+         style:height={bottomRightCorner[1] - topLeftCorner[1] + "px"}
+    >
+        Show Solution
+    </button>
+{/if}
 <!-- A little upset about duplicating PopupTool, but it was _just_ different enough to warrent. -->
 <div class="tool" style:height={isSelected ? "100%" : "30px"} on:pointerdown|stopPropagation={() => selection.set(isSelected ? Tool.None : selectedData)}>
     <div style="background-color: green">✅</div>
