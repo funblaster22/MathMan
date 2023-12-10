@@ -27,6 +27,10 @@
     winWidth = window.innerWidth;
     winHeight = window.innerHeight;
     requestAnimationFrame(async () => {
+      // For some reason, layers can be null in this case
+      // TODO: debounce or maybe set canvas size to max(width, height) so doesn't have to redraw if rotated or resized
+      if (layers[0] == undefined)
+        return;
       // !. is acceptable here b/c if I'm editing an attempt (this screen), then it must exist
       const attempt = (await db.files.get(problemId))!.attempts[attemptId];
       layers[Tool.Draw].putImageData(attempt.work, 0, 0);
