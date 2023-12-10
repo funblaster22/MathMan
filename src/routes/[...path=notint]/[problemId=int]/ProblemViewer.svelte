@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Movable from "svelte-moveable";
+  import type Movable from "svelte-moveable";
   import {db} from "$lib/db";
 
   export let problemId: number;
@@ -11,13 +11,11 @@
     if (file?.question) {
       canvas.width = file.question.width;
       canvas.height = file.question.height;
-      canvas.getContext("2d").putImageData(file.question, 0, 0);
+      canvas.getContext("2d")!.putImageData(file.question, 0, 0);
     }
   });
 
-  function onMouseDown(e) {
-    const target = e.target;
-
+  function onMouseDown(e: MouseEvent) {
     setTimeout(() => {
       movable.dragStart(e);
     });

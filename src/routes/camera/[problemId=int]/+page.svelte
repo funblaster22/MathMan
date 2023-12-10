@@ -27,7 +27,7 @@
     const [width, height] = [video.videoWidth, video.videoHeight];
     const canvas = document.createElement("canvas");
     canvas.width = width; canvas.height = height;
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d") as CanvasRenderingContext2D;
     context.drawImage(video, 0, 0, width, height);
 
     // TODO: this requires a redraw, which is expensive. I could probably do the nessisary math myself

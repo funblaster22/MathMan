@@ -36,7 +36,7 @@
   }
 
   $: {
-    // Ignore, needed to ensure dependants recognised
+    // @ts-ignore needed to ensure dependants recognised
     updateCanvasSize(problemId, attemptId);
     for (const layer of layers) {
       const canvas = layer.canvas;
@@ -45,7 +45,7 @@
   }
 
   function save() {
-    const winDim = [0, 0, winWidth, winHeight];
+    const winDim = [0, 0, winWidth, winHeight] as const;
     db.files.update(problemId, file => {
       // !. is acceptable here
       file.attempts![attemptId] = {
@@ -66,12 +66,12 @@
     [Tool.Question]: "blue",
   } as const;
 
-  const onpointerdown = ev => {
+  const onpointerdown = (ev: PointerEvent) => {
     // TODO: erase all layers if no color selected
     if ($selectedTool >= Tool.None) return;
     const ctx = layers[$selectedTool];
     pointerDown = true;
-    ctx.strokeStyle = colors[$selectedTool];
+    ctx.strokeStyle = colors[$selectedTool as keyof typeof colors];
     ctx.lineWidth = $eraserEnabled ? 20 : 1;
     ctx.globalCompositeOperation = $eraserEnabled ? "destination-out" : "source-over";
     // Path never closed, OK. Prevents undoing erase when new path
@@ -85,7 +85,7 @@
     pointerDown = false;
     // TODO: adjust ROI bounds after erasing
   }
-  const onpointermove = ev => {
+  const onpointermove = (ev: PointerEvent) => {
     if (pointerDown) {
       const ctx = layers[$selectedTool];
       ctx.lineTo(ev.clientX, ev.clientY);

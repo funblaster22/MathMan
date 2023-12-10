@@ -56,7 +56,7 @@ export interface File {
   // Not indexed. Only exists for files, not folders
   attempts: Attempt[],
   // Image of the problem being solved (copied across all attempts)
-  question: ImageData,
+  question?: ImageData,
   // Filename (ex: "problem 1")
   name: string,
 }

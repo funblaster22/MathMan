@@ -2,7 +2,7 @@
   import { base } from "$app/paths";
   import path from "path"
 
-  export let fileStruct: {};
+  export let fileStruct: FileStructure;
   export let indentLevel = 0;
   export let fullPath = "";
 </script>

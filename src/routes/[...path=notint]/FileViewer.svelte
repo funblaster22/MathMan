@@ -1,5 +1,4 @@
 <script lang="ts">
-  import {readable} from "svelte/store";
   import {liveQuery, type Observable} from "dexie";
   import {db, type File} from "$lib/db";
   import {page} from "$app/stores";
@@ -23,7 +22,7 @@
    */
   function timeAgo(date: Date, terse = true): string {
     const now = new Date();
-    const daysAgo = (now - date) / (1000 * 60 * 60 * 24);
+    const daysAgo = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
     if (daysAgo <= 10) {
       return Math.floor(daysAgo) + (terse ? "d" : " days");
     }
@@ -40,7 +39,7 @@
   }
 
   // Variable initializer is not redundant (TODO: check if this is a SSR quirk)
-  let files = readable([]) as Observable<File[]>;
+  let files: Observable<File[]>;
   // Ignore, it is the right type
   $: files = liveQuery(() =>
     // Conditional check on $page.params.path b/c "" is duplicated on empty route
@@ -49,7 +48,8 @@
 </script>
 
 <div class="flex flex-wrap justify-evenly gap-3">
-    {#each $files as file (file.id)}
+    {#each ($files ?? []) as file (file.id)}
+        <!-- TODO: replace w/ file!.id once Svelte supports typescript in markup https://github.com/sveltejs/svelte/issues/4701 -->
         {@const href = path.join("/", base, $page.params.path, file.id.toString())}
         {@const myRecentestAttempt = recentestAttempt(file)}
         <div class="text-center w-[6rem] mr-[11px]">

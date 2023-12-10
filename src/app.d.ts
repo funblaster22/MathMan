@@ -7,6 +7,7 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 	}
+	type FileStructure = { [p: string]: FileStructure };
 }
 
 export {};

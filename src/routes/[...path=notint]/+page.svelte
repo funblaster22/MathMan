@@ -5,11 +5,11 @@
   import FileSidebar from "./FileSidebar.svelte";
   import FileViewer from "./FileViewer.svelte";
 
-  let fileStruct = {};
+  let fileStruct: FileStructure = {};
 
   async function makeFileStruct() {
-    const fileStruct = {}
-    const paths = await db.files.orderBy('[route]').uniqueKeys().then(routes => routes.flat(1));
+    const fileStruct: FileStructure = {}
+    const paths = await db.files.orderBy('[route]').uniqueKeys().then(routes => routes.flat(1)) as string[][];
 
     for (const path of paths) {
       let workingDir = fileStruct;
@@ -23,22 +23,23 @@
     return fileStruct;
   }
 
-  function newFile (...route) {
-    if (route.length < 1) {
-      throw "Need at least filename";
+  function newFile (...route: string[]) {
+    if (route.length === 0) {
+      const input = prompt("Enter path of file to create")?.split("/");
+      if (input == undefined)
+        return
+      if (route.length === 0)
+        throw "Need at least filename";
     }
     db.files.add({
       attempts: [newBlankAttempt()],
       parent: route.at(-2) ?? "",
       route: ["", ...route.slice(0, route.length - 1)],
-      name: route.at(-1),
+      name: route.at(-1) as string,
     });
   }
 
   onMount(() => {
-    // TODO: remove
-    window.newFile = newFile;
-
     makeFileStruct().then(struct => fileStruct = struct);
   });
 </script>
@@ -49,7 +50,7 @@
 
 <div id="grid">
     <div id="ribbon" class="text-right">
-        <button on:click={() => newFile(...prompt("Enter path of file to create").split("/"))}>➕ file</button>
+        <button on:click={() => newFile()}>➕ file</button>
     </div>
     <div id="folders"><FileSidebar {fileStruct} /></div>
     <div id="files"><FileViewer /></div>
