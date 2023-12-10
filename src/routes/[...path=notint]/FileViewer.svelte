@@ -1,36 +1,71 @@
 <script lang="ts">
-    import {readable} from "svelte/store";
-    import {liveQuery, type Observable} from "dexie";
-    import {db} from "$lib/db";
-    import {page} from "$app/stores";
-    import path from "path";
-    import {base} from "$app/paths";
+  import {readable} from "svelte/store";
+  import {liveQuery, type Observable} from "dexie";
+  import {db, type File} from "$lib/db";
+  import {page} from "$app/stores";
+  import path from "path";
+  import {base} from "$app/paths";
 
-    // Variable initializer is not redundant (TODO: check if this is a SSR quirk)
-    let files = readable([]) as Observable<File[]>;
-    // Ignore, it is the right type
-    $: files = liveQuery(() =>
-      // Conditional check on $page.params.path b/c "" is duplicated on empty route
-      db.files.where({"[route]": [["", ...($page.params.path ? $page.params.path.split("/") : [])]]}).toArray()
-    ) as Observable<File[]>;  // Cast needed b/c same type, but not recognised
+  /** Retrieve date of most recent attempt in given `file` */
+  function recentestAttempt(file: File) {
+    if (file.attempts.length === 0)
+      return new Date();
+    return file.attempts.reduce((prev, current) => {
+        return current.date > prev ? current.date : prev;
+    }, new Date(0));
+  }
+
+  /**
+   * Report a relative date in the most logical unit (days until 10, weeks until 16, months until 12, years).
+   * @param date Time since now to report
+   * @param terse if true, use units d, w, m, or y. Otherwise, days, weeks, months, years (respectively)
+   * @returns formatted string. Ex: -5d (5 days ago), -6
+   */
+  function timeAgo(date: Date, terse = true): string {
+    const now = new Date();
+    const daysAgo = (now - date) / (1000 * 60 * 60 * 24);
+    if (daysAgo <= 10) {
+      return Math.floor(daysAgo) + (terse ? "d" : " days");
+    }
+    const weeksAgo = daysAgo / 7;
+    if (weeksAgo <= 16) {
+      return Math.floor(weeksAgo) + (terse ? "w" : " weeks");
+    }
+    const yearsAgo = now.getFullYear() - date.getFullYear();
+    const monthsAgo = yearsAgo * 12 + (now.getMonth() - date.getMonth());
+    if (monthsAgo < 12) {
+      return monthsAgo + (terse ? "m" : " months");
+    }
+    return Math.floor(monthsAgo / 12) + (terse ? "y" : " years");
+  }
+
+  // Variable initializer is not redundant (TODO: check if this is a SSR quirk)
+  let files = readable([]) as Observable<File[]>;
+  // Ignore, it is the right type
+  $: files = liveQuery(() =>
+    // Conditional check on $page.params.path b/c "" is duplicated on empty route
+    db.files.where({"[route]": [["", ...($page.params.path ? $page.params.path.split("/") : [])]]}).toArray()
+  );
 </script>
 
 <div class="flex flex-wrap justify-evenly gap-3">
     {#each $files as file (file.id)}
+        {@const href = path.join("/", base, $page.params.path, file.id.toString())}
+        {@const myRecentestAttempt = recentestAttempt(file)}
         <div class="text-center w-[6rem] mr-[11px]">
             <div class="relative">
-                <a href={path.join("/", base, $page.params.path, file.id.toString())}>
+                <a {href}>
                     <div class="w-full aspect-square border m-auto grid grid-cols-2 grid-rows-3">
-                        <div class="m-auto" title="Days since last attempt">-4d</div>
+                        <div class="m-auto" title="Time since last attempt ({timeAgo(myRecentestAttempt, false)})">-{timeAgo(myRecentestAttempt)}</div>
                         <div class="m-auto" title="Duration of last attempt">⏱️ {77}</div>
-                        <div class="m-auto" title="Number of attempts">✏️ {3}</div><div></div>
+                        <div class="m-auto" title="Number of attempts">✏️ {file.attempts.length}</div><div></div>
                         <div class="m-auto" title="Number of unresolved questions">❔ {5}</div>
                         <div class="m-auto" title="Weighted average of incorrect problems">❌ {3}</div>
                     </div>
                 </a>
                 <button class="attempt-dropdown" title="Show attempts">🔻</button>
             </div>
-            <div>{file.name}</div>
+            <a {href}><div>{file.name}</div></a>
         </div>
     {/each}
     <!-- Padding to make sure `justify-evenly` places extra items left-aligned -->
