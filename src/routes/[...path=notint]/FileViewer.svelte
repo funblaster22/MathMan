@@ -14,11 +14,15 @@
     );
 </script>
 
-<div class="flex flex-wrap gap-5">
+<div class="flex flex-wrap justify-evenly gap-5">
     {#each $files as file (file.id)}
-        <a class="text-center w-[5rem]" href={path.join("/", base, $page.params.path, file.id.toString())}>
-            <div class="w-12 h-12 bg-red-500 m-auto"></div>
+        <a class="text-center w-[6rem]" href={path.join("/", base, $page.params.path, file.id.toString())}>
+            <div class="w-full aspect-square bg-red-500 m-auto"></div>
             <div>{file.name}</div>
         </a>
+    {/each}
+    <!-- Padding to make sure `justify-evenly` places extra items left-aligned -->
+    {#each Array(10) as _}
+        <div class="w-[6rem]"></div>
     {/each}
 </div>
