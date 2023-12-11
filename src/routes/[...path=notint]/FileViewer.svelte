@@ -5,6 +5,20 @@
   import path from "path";
   import {base} from "$app/paths";
 
+  export let fileStruct: FileStructure;
+
+  let fileSubstruct: FileStructure = {};
+
+  $: {
+    if (fileStruct[""] != undefined) {  // fileStruct is {} while db fetching
+      fileSubstruct = fileStruct[""];
+      if ($page.params.path !== "")
+        for (const folder of $page.params.path.split("/")) {
+          fileSubstruct = fileSubstruct[folder];
+        }
+    }
+  }
+
   /** Retrieve date of most recent attempt in given `file` */
   function recentestAttempt(file: File) {
     if (file.attempts.length === 0)
@@ -48,6 +62,12 @@
 </script>
 
 <div class="flex flex-wrap justify-evenly gap-3">
+    {#each Object.keys(fileSubstruct) as folder}
+        <a href={path.join("/", base, $page.params.path, folder)} class="text-center w-[6rem]">
+            <div class="text-7xl aspect-square perfect-center font-mono">📁</div>
+            {folder}
+        </a>
+    {/each}
     {#each ($files ?? []) as file (file.id)}
         <!-- TODO: replace w/ file!.id once Svelte supports typescript in markup https://github.com/sveltejs/svelte/issues/4701 -->
         {@const href = path.join("/", base, $page.params.path, file.id.toString())}

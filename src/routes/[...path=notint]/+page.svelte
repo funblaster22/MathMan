@@ -59,7 +59,7 @@
         <button on:click={() => newFile()}>➕ file</button>
     </div>
     <div id="folders"><FileSidebar {fileStruct} /></div>
-    <div id="files"><FileViewer /></div>
+    <div id="files"><FileViewer {fileStruct} /></div>
 </div>
 
 <style>
