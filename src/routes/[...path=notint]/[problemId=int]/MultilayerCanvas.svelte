@@ -15,6 +15,8 @@
   let winHeight = 0;
   let pointerDown = false;
   let eraserEnabled = getContext<Writable<boolean>>("eraserEnabled");
+  // Milliseconds since epoch that this attempt started. TODO: this state will get messed up when taking picture, but oh well
+  let startTime: number;
   //#endregion
 
   // This technically is fist initialized to CanvasElements, but is immediately changed in onMount.
@@ -42,6 +44,7 @@
   $: {
     // @ts-ignore needed to ensure dependants recognised
     updateCanvasSize(problemId, attemptId);
+    startTime = new Date().getTime();
     for (const layer of layers) {
       const canvas = layer.canvas;
       layer.clearRect(0, 0, canvas.width, canvas.height);
@@ -54,6 +57,7 @@
       // !. is acceptable here
       const attempt = file.attempts![attemptId];
       attempt.date = new Date();
+      attempt.duration = Math.floor((new Date().getTime() - startTime) / 1000 / 60);
       // TODO: properly count questions & mistakes
       if ($selectedTool == Tool.Correct) file.mistakes = 1;
       if ($selectedTool == Tool.Question) file.questions = 1;

@@ -8,10 +8,10 @@
   /** Retrieve date of most recent attempt in given `file` */
   function recentestAttempt(file: File) {
     if (file.attempts.length === 0)
-      return new Date();
+      return {date: new Date(0), duration: 0};
     return file.attempts.reduce((prev, current) => {
-        return current.date > prev ? current.date : prev;
-    }, new Date(0));
+        return current.date > prev.date ? current : prev;
+    });
   }
 
   /**
@@ -56,8 +56,8 @@
             <div class="relative">
                 <a {href}>
                     <div class="w-full aspect-square border m-auto grid grid-cols-2 grid-rows-3">
-                        <div class="m-auto" title="Time since last attempt ({timeAgo(myRecentestAttempt, false)})">-{timeAgo(myRecentestAttempt)}</div>
-                        <div class="m-auto" title="Duration of last attempt">⏱️ {77}</div>
+                        <div class="m-auto" title="Time since last attempt ({timeAgo(myRecentestAttempt.date, false)})">-{timeAgo(myRecentestAttempt.date)}</div>
+                        <div class="m-auto" title="Duration of last attempt ({myRecentestAttempt.duration} minutes)">⏱️ {myRecentestAttempt.duration}</div>
                         <div class="m-auto" title="Number of attempts">✏️ {file.attempts.length}</div><div></div>
                         <div class="m-auto" title="Number of unresolved questions">❔ {file.questions}</div>
                         <div class="m-auto" title="Weighted average of incorrect problems">❌ {file.mistakes}</div>

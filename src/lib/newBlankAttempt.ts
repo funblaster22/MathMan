@@ -1,3 +1,5 @@
+import type {Attempt} from "$lib/db";
+
 export default function newBlankAttempt() {
   // @ts-ignore always call from browser
   const blank = document.createElement("canvas").getContext("2d").getImageData(0, 0, 1, 1);
@@ -7,5 +9,6 @@ export default function newBlankAttempt() {
     error: blank,
     questions: blank,
     rois: [],
-  }
+    duration: 0,
+  } satisfies Attempt;
 }

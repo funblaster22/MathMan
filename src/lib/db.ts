@@ -39,6 +39,8 @@ export interface Roi {
 
 export interface Attempt {
   date: Date,
+  // Minutes that this attempt took
+  duration: number,
   work: ImageData,
   error: ImageData,
   questions: ImageData,
@@ -81,6 +83,8 @@ export class MyDexie extends Dexie {
       files: '++id, parent, *route, [route]',
     });
   }
+
+  // TODO: refactor so newAttempt & newFile live here
 }
 
 export const db = new MyDexie();

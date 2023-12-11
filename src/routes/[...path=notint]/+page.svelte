@@ -28,8 +28,9 @@
       const input = prompt("Enter path of file to create")?.split("/");
       if (input == undefined)
         return
-      if (route.length === 0)
+      if (input.length === 0)
         throw "Need at least filename";
+      route = input;
     }
     db.files.add({
       attempts: [newBlankAttempt()],
