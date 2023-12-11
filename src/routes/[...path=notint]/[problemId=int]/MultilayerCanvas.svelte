@@ -54,6 +54,9 @@
       // !. is acceptable here
       const attempt = file.attempts![attemptId];
       attempt.date = new Date();
+      // TODO: properly count questions & mistakes
+      if ($selectedTool == Tool.Correct) file.mistakes = 1;
+      if ($selectedTool == Tool.Question) file.questions = 1;
 
       // $selectedTool < 3 not needed b/c `pointerDown` can only be set if selected first 3 tools, and `save()` is only called if `pointerDown=true`
       attempt[(["work", "error", "questions"] as const)[$selectedTool as number]] = layers[$selectedTool].getImageData(...winDim);

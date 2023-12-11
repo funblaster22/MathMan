@@ -59,6 +59,10 @@ export interface File {
   question?: ImageData,
   // Filename (ex: "problem 1")
   name: string,
+  // Count mistakes. TODO: In future, this may be encoded by # of question ROI/chunk
+  mistakes: number,
+  // Count questions
+  questions: number,
 }
 
 export class MyDexie extends Dexie {

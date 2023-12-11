@@ -59,8 +59,8 @@
                         <div class="m-auto" title="Time since last attempt ({timeAgo(myRecentestAttempt, false)})">-{timeAgo(myRecentestAttempt)}</div>
                         <div class="m-auto" title="Duration of last attempt">⏱️ {77}</div>
                         <div class="m-auto" title="Number of attempts">✏️ {file.attempts.length}</div><div></div>
-                        <div class="m-auto" title="Number of unresolved questions">❔ {5}</div>
-                        <div class="m-auto" title="Weighted average of incorrect problems">❌ {3}</div>
+                        <div class="m-auto" title="Number of unresolved questions">❔ {file.questions}</div>
+                        <div class="m-auto" title="Weighted average of incorrect problems">❌ {file.mistakes}</div>
                     </div>
                 </a>
                 <button class="attempt-dropdown" title="Show attempts">🔻</button>

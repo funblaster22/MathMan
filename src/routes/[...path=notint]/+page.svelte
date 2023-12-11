@@ -36,6 +36,8 @@
       parent: route.at(-2) ?? "",
       route: ["", ...route.slice(0, route.length - 1)],
       name: route.at(-1) as string,
+      questions: 0,
+      mistakes: 0,
     });
   }
 
