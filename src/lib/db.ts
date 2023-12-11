@@ -65,6 +65,7 @@ export interface File {
   mistakes: number,
   // Count questions
   questions: number,
+  flagged: boolean,
 }
 
 export class MyDexie extends Dexie {

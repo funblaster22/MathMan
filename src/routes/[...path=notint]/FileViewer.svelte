@@ -65,7 +65,7 @@
                 </a>
                 <button class="attempt-dropdown" title="Show attempts">🔻</button>
             </div>
-            <a {href}><div>{file.name}</div></a>
+            <a {href}><div>{file.flagged ? (new Date().getMonth() === 5 ? "🏳️‍🌈 " : "🚩 ") : ""}{file.name}</div></a>
         </div>
     {/each}
     <!-- Padding to make sure `justify-evenly` places extra items left-aligned -->

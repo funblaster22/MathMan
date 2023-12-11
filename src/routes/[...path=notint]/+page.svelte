@@ -41,6 +41,7 @@
       name: route.at(-1) as string,
       questions: 0,
       mistakes: 0,
+      flagged: false,
     });
   }
 

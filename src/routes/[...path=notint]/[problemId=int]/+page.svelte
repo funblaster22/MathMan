@@ -60,7 +60,7 @@
         {/each}
     </div>
     <div id="question-management" class="text-right">
-        <QuestionManagement parentFolder={$page.params.path.split("/").at(-1)} />
+        <QuestionManagement problemId={$problemId} parentFolder={$page.params.path.split("/").at(-1)} />
     </div>
     <div id="tools-container"><Tools selected={selectedTool} /></div>
     <div id="attempts-container" class="flex flex-col p-3 gap-3">
