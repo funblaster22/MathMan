@@ -4,6 +4,7 @@
   import newBlankAttempt from "$lib/newBlankAttempt";
   import FileSidebar from "./FileSidebar.svelte";
   import FileViewer from "./FileViewer.svelte";
+  import {page} from "$app/stores";
 
   let fileStruct: FileStructure = {};
 
@@ -32,6 +33,7 @@
         throw "Need at least filename";
       route = input;
     }
+    route.unshift(...$page.params.path.split("/"));
     db.files.add({
       attempts: [newBlankAttempt()],
       parent: route.at(-2) ?? "",
