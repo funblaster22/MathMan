@@ -3,7 +3,6 @@
   import Tool from "$lib/Tool";
   import {getContext, onMount} from "svelte";
   import type {Writable} from "svelte/store";
-  import debounce from "$lib/debounce";
 
   export let selectedTool: Writable<Tool>;
   export let problemId: number;
@@ -49,20 +48,17 @@
     }
   }
 
-  // TODO: debouncing pros: drawing has less lag. Cons: each path isn't tracked, making undoing more destructive. Is there another way to decrease lag?
-  const save = debounce(() => {
+  const save = () => {
     const winDim = [0, 0, winWidth, winHeight] as const;
     db.files.update(problemId, file => {
       // !. is acceptable here
-      file.attempts![attemptId] = {
-        date: new Date(),
-        work: layers[Tool.Draw].getImageData(...winDim),
-        error: layers[Tool.Correct].getImageData(...winDim),
-        questions: layers[Tool.Question].getImageData(...winDim),
-        rois: file.attempts![attemptId].rois,
-      }
+      const attempt = file.attempts![attemptId];
+      attempt.date = new Date();
+
+      // $selectedTool < 3 not needed b/c `pointerDown` can only be set if selected first 3 tools, and `save()` is only called if `pointerDown=true`
+      attempt[(["work", "error", "questions"] as const)[$selectedTool as number]] = layers[$selectedTool].getImageData(...winDim);
     });
-  }, 1000);
+  };
 
   const isDarkMode = typeof window === "undefined" ? false : window.matchMedia('(prefers-color-scheme: dark)').matches;
   const colors = {
