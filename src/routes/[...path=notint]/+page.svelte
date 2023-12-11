@@ -5,8 +5,10 @@
   import FileSidebar from "./FileSidebar.svelte";
   import FileViewer from "./FileViewer.svelte";
   import {page} from "$app/stores";
+  import {writable} from "svelte/store";
 
   let fileStruct: FileStructure = {};
+  const deleteEnabled = writable(false);
 
   async function makeFileStruct() {
     const fileStruct: FileStructure = {}
@@ -56,10 +58,11 @@
 
 <div id="grid">
     <div id="ribbon" class="text-right">
+        <button on:click={() => $deleteEnabled = !$deleteEnabled}>🗑️ file</button>
         <button on:click={() => newFile()}>➕ file</button>
     </div>
     <div id="folders"><FileSidebar {fileStruct} /></div>
-    <div id="files"><FileViewer {fileStruct} /></div>
+    <div id="files"><FileViewer {fileStruct} {deleteEnabled} /></div>
 </div>
 
 <style>

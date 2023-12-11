@@ -4,8 +4,10 @@
   import {page} from "$app/stores";
   import path from "path";
   import {base} from "$app/paths";
+  import type {Writable} from "svelte/store";
 
   export let fileStruct: FileStructure;
+  export let deleteEnabled: Writable<boolean>;
 
   let fileSubstruct: FileStructure = {};
 
@@ -52,6 +54,14 @@
     return Math.floor(monthsAgo / 12) + (terse ? "y" : " years");
   }
 
+  /** Show attempts or delete file, depending on state */
+  function auxButtonClicked(id: number) {
+    if ($deleteEnabled) {
+      db.files.delete(id);
+    }
+    // TODO: show children
+  }
+
   // Variable initializer is not redundant (TODO: check if this is a SSR quirk)
   let files: Observable<File[]>;
   // Ignore, it is the right type
@@ -83,7 +93,7 @@
                         <div class="m-auto" title="Weighted average of incorrect problems">❌ {file.mistakes}</div>
                     </div>
                 </a>
-                <button class="attempt-dropdown" title="Show attempts">🔻</button>
+                <button class="attempt-dropdown" title="Show attempts" on:click={auxButtonClicked.bind(this, file.id)}>{$deleteEnabled ? "🗑️" : "🔻"}</button>
             </div>
             <a {href}><div>{file.flagged ? (new Date().getMonth() === 5 ? "🏳️‍🌈 " : "🚩 ") : ""}{file.name}</div></a>
         </div>
