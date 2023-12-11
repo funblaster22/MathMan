@@ -4,7 +4,13 @@ declare global {
 	namespace App {
 		// interface Error {}
 		// interface Locals {}
-		// interface PageData {}
+		// All pages don't have both properties, but I'm not marking optional b/c it'll require verbose type assertions
+		interface PageData {
+			/** Consistent fully qualified path (always includes leading ""). Derived from `params.path` */
+			path: string[],
+			/** Parsed integer `params.problemId` */
+			problemId: number,
+		}
 		// interface Platform {}
 	}
 	type FileStructure = { [p: string]: FileStructure };
