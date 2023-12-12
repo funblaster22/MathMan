@@ -38,6 +38,7 @@ export interface Roi {
 }
 
 export interface Attempt {
+  // Date of last edit
   date: Date,
   // Minutes that this attempt took
   duration: number,
@@ -45,6 +46,10 @@ export interface Attempt {
   error: ImageData,
   questions: ImageData,
   rois: Roi[],
+  // Count mistakes. TODO: In future, this may be encoded by # of question ROI/chunk
+  mistakeCount: number,
+  // Count questions
+  questionCount: number,
 }
 
 export interface File {
@@ -61,10 +66,6 @@ export interface File {
   question?: ImageData,
   // Filename (ex: "problem 1")
   name: string,
-  // Count mistakes. TODO: In future, this may be encoded by # of question ROI/chunk
-  mistakes: number,
-  // Count questions
-  questions: number,
   flagged: boolean,
 }
 
@@ -85,7 +86,43 @@ export class MyDexie extends Dexie {
     });
   }
 
-  // TODO: refactor so newAttempt & newFile live here
+  /** Add new file to database. If `route` not provided, prompt the user. */
+  newFile({basePath = [""], route = []}: {basePath?: string[], route?: string[]} = {}) {
+    if (route.length === 0) {
+      const input = prompt("Enter path of file to create")?.split("/");
+      if (input == undefined)
+        return;
+      if (input[0] === "") {
+        alert("Need at least filename");
+        return;
+      }
+      route = input;
+    }
+    route.unshift(...basePath);
+    db.files.add({
+      attempts: [this.newBlankAttempt()],
+      parent: route.at(-2) ?? "",
+      route: route.slice(0, route.length - 1),
+      name: route.at(-1) as string,
+      flagged: false,
+    });
+  }
+
+  /** Construct an object representing a blank attempt, but don't add it to the database */
+  newBlankAttempt() {
+    // @ts-ignore always call from browser
+    const blank = document.createElement("canvas").getContext("2d").getImageData(0, 0, 1, 1);
+    return {
+      date: new Date(),
+      work: blank,
+      error: blank,
+      questions: blank,
+      rois: [],
+      duration: 0,
+      mistakeCount: 0,
+      questionCount: 0,
+    } satisfies Attempt;
+  }
 }
 
 export const db = new MyDexie();

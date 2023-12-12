@@ -13,7 +13,7 @@
   /** Retrieve date of most recent attempt in given `file` */
   const recentestAttempt = (function(file: File) {
     if (file.attempts.length === 0)
-      return {date: new Date(0), duration: 0};
+      return db.newBlankAttempt();
     return file.attempts.reduce((prev, current) => {
       return current.date > prev.date ? current : prev;
     });
@@ -59,8 +59,8 @@
                 <div class="m-auto" title="Time since last attempt ({timeAgo(recentestAttempt.date, false)})">-{timeAgo(recentestAttempt.date)}</div>
                 <div class="m-auto" title="Duration of last attempt ({recentestAttempt.duration} minutes)">⏱️ {recentestAttempt.duration}</div>
                 <div class="m-auto" title="Number of attempts">✏️ {file.attempts.length}</div><div></div>
-                <div class="m-auto" title="Number of unresolved questions">❔ {file.questions}</div>
-                <div class="m-auto" title="Weighted average of incorrect problems">❌ {file.mistakes}</div>
+                <div class="m-auto" title="Number of unresolved questions">❔ {file.attempts.reduce((acc, attempt) => acc += attempt.questionCount, 0)}</div>
+                <div class="m-auto" title="Weighted average of incorrect problems">❌ {recentestAttempt.mistakeCount}</div>
             </div>
         </a>
         <button class="attempt-dropdown" title="Show attempts" on:click={auxButtonClicked.bind(this, file.id)}>{$deleteEnabled ? "🗑️" : "🔻"}</button>

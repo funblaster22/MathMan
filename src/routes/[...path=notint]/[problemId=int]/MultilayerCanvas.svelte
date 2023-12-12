@@ -59,8 +59,8 @@
       attempt.date = new Date();
       attempt.duration = Math.floor((new Date().getTime() - startTime) / 1000 / 60);
       // TODO: properly count questions & mistakes
-      if ($selectedTool == Tool.Correct) file.mistakes = 1;
-      if ($selectedTool == Tool.Question) file.questions = 1;
+      if ($selectedTool == Tool.Correct) attempt.mistakeCount = 1;
+      if ($selectedTool == Tool.Question) attempt.questionCount = 1;
 
       // $selectedTool < 3 not needed b/c `pointerDown` can only be set if selected first 3 tools, and `save()` is only called if `pointerDown=true`
       attempt[(["work", "error", "questions"] as const)[$selectedTool as number]] = layers[$selectedTool].getImageData(...winDim);

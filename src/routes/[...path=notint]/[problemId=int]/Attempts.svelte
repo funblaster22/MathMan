@@ -3,7 +3,6 @@
   import AttemptPreview from "$lib/AttemptPreview.svelte";
   import {liveQuery} from "dexie";
   import {db} from "$lib/db";
-  import newBlankAttempt from "$lib/newBlankAttempt";
 
   export let problemId: number;
 
@@ -13,7 +12,7 @@
 
   function newAttempt() {
     db.files.update(problemId, file => {
-      goto("?attempt=" + file.attempts!.push(newBlankAttempt()))
+      goto("?attempt=" + file.attempts!.push(db.newBlankAttempt()))
     });
   }
 </script>

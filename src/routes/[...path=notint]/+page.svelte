@@ -1,7 +1,6 @@
 <script lang="ts">
   import {onMount} from "svelte";
   import {db} from "$lib/db";
-  import newBlankAttempt from "$lib/newBlankAttempt";
   import FileSidebar from "./FileSidebar.svelte";
   import FileViewer from "./FileViewer.svelte";
   import {page} from "$app/stores";
@@ -26,29 +25,6 @@
     return fileStruct;
   }
 
-  function newFile (...route: string[]) {
-    if (route.length === 0) {
-      const input = prompt("Enter path of file to create")?.split("/");
-      if (input == undefined)
-        return;
-      if (input[0] === "") {
-        alert("Need at least filename");
-        return;
-      }
-      route = input;
-    }
-    route.unshift(...$page.data.path);
-    db.files.add({
-      attempts: [newBlankAttempt()],
-      parent: route.at(-2) ?? "",
-      route: route.slice(0, route.length - 1),
-      name: route.at(-1) as string,
-      questions: 0,
-      mistakes: 0,
-      flagged: false,
-    });
-  }
-
   onMount(() => {
     makeFileStruct().then(struct => fileStruct = struct);
   });
@@ -61,7 +37,7 @@
 <div id="grid">
     <div id="ribbon" class="text-right">
         <button on:click={() => $deleteEnabled = !$deleteEnabled}>🗑️ file</button>
-        <button on:click={() => newFile()}>➕ file</button>
+        <button on:click={() => db.newFile({basePath: $page.data.path})}>➕ file</button>
     </div>
     <div id="folders"><FileSidebar {fileStruct} /></div>
     <div id="files"><FileViewer {fileStruct} {deleteEnabled} /></div>
