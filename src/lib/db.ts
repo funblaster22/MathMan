@@ -1,30 +1,4 @@
-import Dexie, { type Table } from 'dexie';
-
-/*
-files {
-    name:
-    parent:  // Useful for rendering file view. TODO: if possible to use `route` to only show direct descendants, omit this (doubtful)
-    route: [mat, 10.8, homework]  // Useful for querying all recursive folder contents
-
-    //
-    attempts?: [
-        {
-            date: Date
-            work: img blob
-            error: img blob
-            rois: [
-                {
-                    x: int
-                    y: int
-                    type: (enum) question, solution
-                }
-            ]
-        }
-    ]
-}
-*/
-
-// Adapted from https://dexie.org/docs/Tutorial/Svelte
+import Dexie, {type DBCoreIndex, type Table} from 'dexie';
 
 export enum RoiType {
   question,
@@ -69,6 +43,7 @@ export interface File {
   flagged: boolean,
 }
 
+// Adapted from https://dexie.org/docs/Tutorial/Svelte
 export class MyDexie extends Dexie {
   // 'files' is added by dexie when declaring the stores()
   // We just tell the typing system this is the case
@@ -77,12 +52,50 @@ export class MyDexie extends Dexie {
   constructor() {
     super('localDatabase');
     // Docs: https://dexie.org/docs/Version/Version.stores()#schema-syntax
-    this.version(15).stores({
-      // Primary key and indexed props
-      // [route] creates a multikey, but I'm using it as an alias for route (hacky, need to flatten(1))
-      // Useful for constructing the file tree
+    this.version(31).stores({
       // TODO: maybe contribute upstream easier way to alias. See https://github.com/dexie/Dexie.js/blob/master/src/classes/version/schema-helpers.ts#L388
-      files: '++id, parent, *route, [route]',
+      // Change modern/dexie.mjs to
+      // const [name, alias] = index.replace(/([&*]|\+\+)/g, "").split(/ +as +/);
+      // return createIndexSpec(alias || name, ...
+      files: '++id, parent, *route as r, route as fullRoute',
+    }).upgrade(trans => {
+      console.log(trans);
+      // This is the best way I could find to alias an index. Ignore Dexie complaints
+      // Previously used `[route]` multikey, but return shape inconsistent between safari & chrome (need to `flatten(1)` on Chrome)
+      // `*route` is used
+      // (trans.idbtrans as IDBTransaction).objectStore("files").createIndex("fullRoute", "route");
+    });
+
+    // Docs: https://dexie.org/docs/Dexie/Dexie.use()
+    this.use({
+      stack: "dbcore", // The only stack supported so far.
+      name: "UndoVirtualIndexMiddleware", // Optional name of your middleware
+      create (downlevelDatabase) {
+        // Return your own implementation of DBCore:
+        return {
+          // Copy default implementation.
+          ...downlevelDatabase,
+          table (tableName) {
+            // Call default table method
+            const downlevelTable = downlevelDatabase.table(tableName);
+            const indexByKeyName: Record<string, DBCoreIndex> = {};
+            downlevelTable.schema.indexes.forEach(index => indexByKeyName[index.name!] = index);
+            // Derive your own table from it:
+            return {
+              ...downlevelTable,
+              schema: {
+                ...downlevelTable.schema,
+                getIndexByKeyPath(keyPath: null | string | string[]) {
+                  // Default implementation: indexByKeyPath[getKeyPathAlias(keyPath)] https://github.com/dexie/Dexie.js/tree/master/src/dbcore/dbcore-indexeddb.ts#L82
+                  if (typeof keyPath !== "string")
+                    throw "Non-string keyPath not supported"
+                  return indexByKeyName[keyPath];
+                },
+              },
+            }
+          },
+        };
+      }
     });
   }
 

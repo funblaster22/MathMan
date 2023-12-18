@@ -11,7 +11,7 @@
 
   async function makeFileStruct() {
     const fileStruct: FileStructure = {}
-    const paths = await db.files.orderBy('[route]').uniqueKeys().then(routes => routes.flat(1)) as string[][];
+    const paths = await db.files.orderBy('fullRoute').uniqueKeys() as unknown as string[][];
 
     for (const path of paths) {
       let workingDir = fileStruct;
@@ -26,6 +26,8 @@
   }
 
   onMount(() => {
+    window.db = db;
+
     makeFileStruct().then(struct => fileStruct = struct);
   });
 </script>
