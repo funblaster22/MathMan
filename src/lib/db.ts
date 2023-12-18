@@ -86,20 +86,24 @@ export class MyDexie extends Dexie {
     });
   }
 
-  /** Add new file to database. If `route` not provided, prompt the user. */
-  newFile({basePath = [""], route = []}: {basePath?: string[], route?: string[]} = {}) {
+  /** Add new file to database with blank attempt and defaults.
+   * @param basePath defaults to root path
+   * @param route if not provided, prompt the user
+   * @returns Promise resolving to id of newly inserted row. If canceled, will resolve to -1
+   */
+  async newFile({basePath = [""], route = []}: {basePath?: string[], route?: string[]} = {}): Promise<number> {
     if (route.length === 0) {
       const input = prompt("Enter path of file to create")?.split("/");
       if (input == undefined)
-        return;
+        return -1;
       if (input[0] === "") {
         alert("Need at least filename");
-        return;
+        return -1;
       }
       route = input;
     }
     route.unshift(...basePath);
-    db.files.add({
+    return db.files.add({
       attempts: [this.newBlankAttempt()],
       parent: route.at(-2) ?? "",
       route: route.slice(0, route.length - 1),
