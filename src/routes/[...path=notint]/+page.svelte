@@ -11,11 +11,11 @@
 
   async function makeFileStruct() {
     const fileStruct: FileStructure = {}
-    const paths = await db.files.orderBy('fullRoute').uniqueKeys() as unknown as string[][];
+    const paths = await db.files.orderBy('route').uniqueKeys() as string[];
 
     for (const path of paths) {
       let workingDir = fileStruct;
-      for (const folder of path) {
+      for (const folder of path.split("/")) {
         if (!(folder in workingDir))
           workingDir[folder] = {};
         workingDir = workingDir[folder];

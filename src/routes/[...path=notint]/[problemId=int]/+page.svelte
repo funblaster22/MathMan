@@ -27,7 +27,7 @@
     // Fetch entry for problemId
     // If entry exists and params.path != entry.route, change URL to file.route
     if (file) {
-      const fileRoute = file.route.join("/");
+      const fileRoute = file.route;
       if ("/" + $page.params.path !== fileRoute) {
         goto(path.join("/", base, fileRoute, $page.params.problemId));
       }

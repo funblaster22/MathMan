@@ -31,9 +31,9 @@ export interface File {
   id?: number;
   // Useful for rendering file view. MUST NOT be null b/c indexeddb can't query it then TODO: remove this & query full route instead (might have issue if 2 folders have same name)
   parent: string;
-  // Full folder path to file. Useful for querying all recursive folder contents. Example: ["", mat, 10.8]
-  // Gaunted to have at least 1 item (root "")
-  route: string[];
+  // Full folder path to file. Useful for querying all recursive folder contents. Example: `/mat/10.8`
+  // . When `split("/")`, first element should be ""
+  route: string;
   // Not indexed. Only exists for files, not folders
   attempts: Attempt[],
   // Image of the problem being solved (copied across all attempts)
@@ -52,50 +52,8 @@ export class MyDexie extends Dexie {
   constructor() {
     super('localDatabase');
     // Docs: https://dexie.org/docs/Version/Version.stores()#schema-syntax
-    this.version(31).stores({
-      // TODO: maybe contribute upstream easier way to alias. See https://github.com/dexie/Dexie.js/blob/master/src/classes/version/schema-helpers.ts#L388
-      // Change modern/dexie.mjs to
-      // const [name, alias] = index.replace(/([&*]|\+\+)/g, "").split(/ +as +/);
-      // return createIndexSpec(alias || name, ...
-      files: '++id, parent, *route as r, route as fullRoute',
-    }).upgrade(trans => {
-      console.log(trans);
-      // This is the best way I could find to alias an index. Ignore Dexie complaints
-      // Previously used `[route]` multikey, but return shape inconsistent between safari & chrome (need to `flatten(1)` on Chrome)
-      // `*route` is used
-      // (trans.idbtrans as IDBTransaction).objectStore("files").createIndex("fullRoute", "route");
-    });
-
-    // Docs: https://dexie.org/docs/Dexie/Dexie.use()
-    this.use({
-      stack: "dbcore", // The only stack supported so far.
-      name: "UndoVirtualIndexMiddleware", // Optional name of your middleware
-      create (downlevelDatabase) {
-        // Return your own implementation of DBCore:
-        return {
-          // Copy default implementation.
-          ...downlevelDatabase,
-          table (tableName) {
-            // Call default table method
-            const downlevelTable = downlevelDatabase.table(tableName);
-            const indexByKeyName: Record<string, DBCoreIndex> = {};
-            downlevelTable.schema.indexes.forEach(index => indexByKeyName[index.name!] = index);
-            // Derive your own table from it:
-            return {
-              ...downlevelTable,
-              schema: {
-                ...downlevelTable.schema,
-                getIndexByKeyPath(keyPath: null | string | string[]) {
-                  // Default implementation: indexByKeyPath[getKeyPathAlias(keyPath)] https://github.com/dexie/Dexie.js/tree/master/src/dbcore/dbcore-indexeddb.ts#L82
-                  if (typeof keyPath !== "string")
-                    throw "Non-string keyPath not supported"
-                  return indexByKeyName[keyPath];
-                },
-              },
-            }
-          },
-        };
-      }
+    this.version(32).stores({
+      files: '++id, parent, route',
     });
   }
 
@@ -119,7 +77,7 @@ export class MyDexie extends Dexie {
     return db.files.add({
       attempts: [this.newBlankAttempt()],
       parent: route.at(-2) ?? "",
-      route: route.slice(0, route.length - 1),
+      route: route.slice(0, route.length - 1).join("/"),
       name: route.at(-1) as string,
       flagged: false,
     });

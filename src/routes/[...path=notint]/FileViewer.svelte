@@ -25,7 +25,7 @@
   let files: Observable<File[]>;
   $: files = liveQuery(() =>
     // Conditional check on $page.params.path b/c "" is duplicated on empty route
-    db.files.where({"fullRoute": ["", ...($page.params.path ? $page.params.path.split("/") : [])]}).toArray()
+    db.files.where({"route": $page.data.path.join("/")}).toArray()
   );
 </script>
 
