@@ -3,6 +3,7 @@
   import AttemptPreview from "$lib/AttemptPreview.svelte";
   import {liveQuery, type Observable} from "dexie";
   import {type Attempt, Db, db} from "$lib/db";
+  import {searchSet} from "$lib";
 
   export let problemId: number;
 
@@ -20,12 +21,12 @@
 
 <!-- TODO: I'm not sure why layout shifts when scrollbar present -->
 {#each $attempts ?? [] as attempt, idx ("" + problemId + idx)}
-    <div on:click={() => goto("?attempt=" + (idx + 1))}>
+    <button on:click={() => searchSet("attempt", String(idx + 1))}>
         <AttemptPreview {attempt} {idx} />
-    </div>
+    </button>
 {/each}
-<div class="text-center bg-gray-50 rounded-md w-[100px]" on:click={newAttempt}>
+<button class="text-center bg-gray-50 rounded-md w-[100px]" on:click={newAttempt}>
     <!-- TODO: replace w, h, leading w/ dynamic values -->
     <div class="w-[100px] h-[76px] align-middle text-5xl leading-[1.65]">➕</div>
     New Attempt
-</div>
+</button>
