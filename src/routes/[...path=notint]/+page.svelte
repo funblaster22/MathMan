@@ -1,17 +1,19 @@
 <script lang="ts">
-  import {onMount} from "svelte";
   import {db} from "$lib/db";
   import FileSidebar from "./FileSidebar.svelte";
   import FileViewer from "./FileViewer.svelte";
   import {page} from "$app/stores";
   import {writable} from "svelte/store";
+  import {liveQuery} from "dexie";
 
   let fileStruct: FileStructure = {};
   const deleteEnabled = writable(false);
+  const paths = liveQuery(() =>
+    db.files.orderBy('route').uniqueKeys() as Promise<string[]>
+  );
 
-  async function makeFileStruct() {
+  async function makeFileStruct(paths: string[]) {
     const fileStruct: FileStructure = {"": {}};
-    const paths = await db.files.orderBy('route').uniqueKeys() as string[];
 
     for (const path of paths) {
       let workingDir = fileStruct[""];
@@ -25,11 +27,7 @@
     return fileStruct;
   }
 
-  onMount(() => {
-    window.db = db;
-
-    makeFileStruct().then(struct => fileStruct = struct);
-  });
+  $: makeFileStruct($paths).then(struct => fileStruct = struct);
 </script>
 
 <svelte:head>
