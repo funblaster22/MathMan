@@ -1,4 +1,5 @@
-import Dexie, {type DBCoreIndex, type Table} from 'dexie';
+import Dexie, {type Table} from 'dexie';
+import * as path from "$lib/path";
 
 export enum RoiType {
   question,
@@ -29,8 +30,6 @@ export interface Attempt {
 export interface File {
   // Autoincrementing primary key
   id?: number;
-  // Useful for rendering file view. MUST NOT be null b/c indexeddb can't query it then TODO: remove this & query full route instead (might have issue if 2 folders have same name)
-  parent: string;
   // Full folder path to file. Useful for querying all recursive folder contents. Example: `/mat/10.8`
   // . When `split("/")`, first element should be ""
   route: string;
@@ -43,14 +42,21 @@ export interface File {
   flagged: boolean,
 }
 
+export interface FileSlim extends Pick<File, "id" | "name" | "route"> {
+  attempts: {
+    questions: number,
+    mistakes: number
+  }[]
+}
+
 // Adapted from https://dexie.org/docs/Tutorial/Svelte
-export class MyDexie extends Dexie {
+export class Db extends Dexie {
   // 'files' is added by dexie when declaring the stores()
   // We just tell the typing system this is the case
   files!: Table<File>;
 
   constructor() {
-    super('localDatabase');
+    super('MathMan');
     // Docs: https://dexie.org/docs/Version/Version.stores()#schema-syntax
     this.version(32).stores({
       files: '++id, parent, route',
@@ -62,29 +68,28 @@ export class MyDexie extends Dexie {
    * @param route if not provided, prompt the user
    * @returns Promise resolving to id of newly inserted row. If canceled, will resolve to -1
    */
-  async newFile({basePath = [""], route = []}: {basePath?: string[], route?: string[]} = {}): Promise<number> {
+  async newFile({basePath = "", route = ""}: {basePath?: string, route?: string} = {}): Promise<number> {
     if (route.length === 0) {
-      const input = prompt("Enter path of file to create")?.split("/");
-      if (input == undefined)
+      const input = prompt("Enter path of file to create");
+      if (input == null)
         return -1;
-      if (input[0] === "") {
+      if (input === "") {
         alert("Need at least filename");
         return -1;
       }
       route = input;
     }
-    route.unshift(...basePath);
+    const routeArr = path.resolve(route, basePath).split("/");
     return db.files.add({
-      attempts: [this.newBlankAttempt()],
-      parent: route.at(-2) ?? "",
-      route: route.slice(0, route.length - 1).join("/"),
-      name: route.at(-1) as string,
+      attempts: [Db.newBlankAttempt()],
+      name: routeArr.pop() as string,
+      route: routeArr.join("/"),
       flagged: false,
     });
   }
 
   /** Construct an object representing a blank attempt, but don't add it to the database */
-  newBlankAttempt() {
+  static newBlankAttempt() {
     // @ts-ignore always call from browser
     const blank = document.createElement("canvas").getContext("2d").getImageData(0, 0, 1, 1);
     return {
@@ -100,4 +105,4 @@ export class MyDexie extends Dexie {
   }
 }
 
-export const db = new MyDexie();
+export const db = new Db();

@@ -13,19 +13,19 @@
   let fileSubstruct: FileStructure = {};
 
   $: {
-    if (fileStruct[""] != undefined) {  // fileStruct is {} while db fetching
-      fileSubstruct = fileStruct[""];
-      if ($page.params.path !== "")
-        for (const folder of $page.params.path.split("/")) {
-          fileSubstruct = fileSubstruct[folder];
-        }
+    fileSubstruct = fileStruct;
+    for (const folder of $page.data.path) {
+      fileSubstruct = fileSubstruct[folder];
+      if (fileSubstruct == undefined) {
+        fileSubstruct = {};
+        break;
+      }
     }
   }
 
   let files: Observable<File[]>;
   $: files = liveQuery(() =>
-    // Conditional check on $page.params.path b/c "" is duplicated on empty route
-    db.files.where({"route": $page.data.path.join("/")}).toArray()
+    db.files.where({route: $page.params.path}).toArray()
   );
 </script>
 

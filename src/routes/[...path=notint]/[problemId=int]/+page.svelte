@@ -21,14 +21,17 @@
 
   const problemId = derived(page, $page => Number.parseInt($page.params.problemId));
   const attemptId = derived(page, $page => Number.parseInt($page.url.searchParams.get('attempt') ?? "1") - 1);
+  let fileRoute: string;
 
   function enforceCorrectUrl(file: File | undefined) {
     // rectify invalid states.
     // Fetch entry for problemId
     // If entry exists and params.path != entry.route, change URL to file.route
     if (file) {
-      const fileRoute = file.route;
-      if ("/" + $page.params.path !== fileRoute) {
+      fileRoute = file.route;
+      // Only check startsWith instead of full equality b/c can be incomplete when recursively reviewing a folder.
+      // This also means you can't depend on $page.params.path == problemId.route
+      if (!fileRoute.startsWith($page.params.path)) {
         goto(path.join("/", base, fileRoute, $page.params.problemId));
       }
     } else {
@@ -60,7 +63,7 @@
         {/each}
     </div>
     <div id="question-management" class="text-right">
-        <QuestionManagement problemId={$problemId} parentFolder={$page.params.path.split("/").at(-1)} />
+        <QuestionManagement problemId={$problemId} problemRoute={fileRoute} />
     </div>
     <div id="tools-container"><Tools selected={selectedTool} /></div>
     <div id="attempts-container" class="flex flex-col p-3 gap-3">

@@ -1,6 +1,6 @@
 <script lang="ts">
   import {onMount} from "svelte";
-  import {type Attempt} from "$lib/db";
+  import type {Attempt} from "$lib/db";
 
   export let attempt: Attempt;
   export let idx: number;

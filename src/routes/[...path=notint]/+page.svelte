@@ -10,11 +10,11 @@
   const deleteEnabled = writable(false);
 
   async function makeFileStruct() {
-    const fileStruct: FileStructure = {}
+    const fileStruct: FileStructure = {"": {}};
     const paths = await db.files.orderBy('route').uniqueKeys() as string[];
 
     for (const path of paths) {
-      let workingDir = fileStruct;
+      let workingDir = fileStruct[""];
       for (const folder of path.split("/")) {
         if (!(folder in workingDir))
           workingDir[folder] = {};
@@ -39,7 +39,7 @@
 <div id="grid">
     <div id="ribbon" class="text-right">
         <button on:click={() => $deleteEnabled = !$deleteEnabled}>🗑️ file</button>
-        <button on:click={() => db.newFile({basePath: $page.data.path})}>➕ file</button>
+        <button on:click={() => db.newFile({basePath: $page.params.path})}>➕ file</button>
     </div>
     <div id="folders"><FileSidebar {fileStruct} /></div>
     <div id="files"><FileViewer {fileStruct} {deleteEnabled} /></div>

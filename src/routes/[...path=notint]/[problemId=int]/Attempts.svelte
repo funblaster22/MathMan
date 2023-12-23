@@ -1,24 +1,25 @@
 <script lang="ts">
   import {goto} from "$app/navigation";
   import AttemptPreview from "$lib/AttemptPreview.svelte";
-  import {liveQuery} from "dexie";
-  import {db} from "$lib/db";
+  import {liveQuery, type Observable} from "dexie";
+  import {type Attempt, Db, db} from "$lib/db";
 
   export let problemId: number;
 
-  const attempts = liveQuery(
+  let attempts: Observable<Attempt[]>;
+  $: attempts = liveQuery(
     () => db.files.get(problemId).then(problem => problem!.attempts)
   );
 
   function newAttempt() {
     db.files.update(problemId, file => {
-      goto("?attempt=" + file.attempts!.push(db.newBlankAttempt()))
+      goto("?attempt=" + file.attempts!.push(Db.newBlankAttempt()))
     });
   }
 </script>
 
 <!-- TODO: I'm not sure why layout shifts when scrollbar present -->
-{#each $attempts ?? [] as attempt, idx}
+{#each $attempts ?? [] as attempt, idx ("" + problemId + idx)}
     <div on:click={() => goto("?attempt=" + (idx + 1))}>
         <AttemptPreview {attempt} {idx} />
     </div>

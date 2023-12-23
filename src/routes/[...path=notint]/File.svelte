@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {db, type File} from "$lib/db";
+  import {db, Db, type File} from "$lib/db";
   import type {Writable} from "svelte/store";
   import path from "path";
   import {base} from "$app/paths";
@@ -13,7 +13,7 @@
   /** Retrieve date of most recent attempt in given `file` */
   const recentestAttempt = (function(file: File) {
     if (file.attempts.length === 0)
-      return db.newBlankAttempt();
+      return Db.newBlankAttempt();
     return file.attempts.reduce((prev, current) => {
       return current.date > prev.date ? current : prev;
     });
