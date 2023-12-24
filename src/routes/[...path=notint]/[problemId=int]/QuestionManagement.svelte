@@ -3,7 +3,7 @@
   import {liveQuery, type Observable} from "dexie";
   import {db, type FileSlim} from "$lib/db";
   import {page} from "$app/stores";
-  import {searchSet} from "$lib";
+  import {setSearch} from "$lib";
 
   enum StudyMode {
     Work = "Work",
@@ -18,7 +18,7 @@
   $: questionIndex = Math.max(0, questionsFiltered.findIndex(q => q.id === problemId));
   $: goto(String(questionsFiltered[questionIndex]?.id ?? 0));
   let studyMode = $page.url.searchParams.get("studyMode") as StudyMode ?? StudyMode.Work;
-  // $: searchSet("studyMode", studyMode);  TODO: overwrites questionIndex goto
+  // $: setSearch("studyMode", studyMode);  TODO: overwrites questionIndex goto
   let flagged = false;
   let fileName: string;
   $: db.files.get(problemId).then(file => {

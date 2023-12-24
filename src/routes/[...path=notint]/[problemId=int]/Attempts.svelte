@@ -3,7 +3,7 @@
   import AttemptPreview from "$lib/AttemptPreview.svelte";
   import {liveQuery, type Observable} from "dexie";
   import {type Attempt, Db, db} from "$lib/db";
-  import {searchSet} from "$lib";
+  import {setSearch} from "$lib";
 
   export let problemId: number;
 
@@ -21,7 +21,7 @@
 
 <!-- TODO: I'm not sure why layout shifts when scrollbar present -->
 {#each $attempts ?? [] as attempt, idx ("" + problemId + idx)}
-    <button on:click={() => searchSet("attempt", String(idx + 1))}>
+    <button on:click={() => setSearch("attempt", String(idx + 1))}>
         <AttemptPreview {attempt} {idx} />
     </button>
 {/each}
