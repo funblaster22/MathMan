@@ -5,6 +5,9 @@
   import {page} from "$app/stores";
   import {writable} from "svelte/store";
   import {liveQuery} from "dexie";
+  import {goto} from "$app/navigation";
+  import path from "path";
+  import {base} from "$app/paths";
 
   let fileStruct: FileStructure = {};
   const deleteEnabled = writable(false);
@@ -36,6 +39,7 @@
 
 <div id="grid">
     <div id="ribbon" class="text-right">
+        <button on:click={() => goto(path.join("/", base, ...$page.data.path.slice(0, -1)))}>🆙📁</button>
         <button on:click={() => $deleteEnabled = !$deleteEnabled}>🗑️ file</button>
         <button on:click={() => db.newFile({basePath: $page.params.path})}>➕ file</button>
     </div>
