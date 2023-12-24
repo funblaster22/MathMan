@@ -6,6 +6,7 @@
   import {base} from "$app/paths";
   import type {Writable} from "svelte/store";
   import FileComponent from "./File.svelte";
+  import IconFile from "./IconFile.svelte";
 
   export let fileStruct: FileStructure;
   export let deleteEnabled: Writable<boolean>;
@@ -32,19 +33,10 @@
 <div class="flex flex-wrap justify-evenly gap-3">
     <!-- TODO: make these both components? They would be pretty small though -->
     <!-- Use id 0 for unknown since -1 is not recognised by my parser & 0 should never be a key -->
-    <a href={path.join("/", base, $page.params.path, "0?studyMode=Mistakes")} class="text-center w-[6rem]">
-        <div class="text-7xl aspect-square perfect-center font-mono">💯</div>
-        Review Mistakes
-    </a>
-    <a href={path.join("/", base, $page.params.path, "0?studyMode=Questions")} class="text-center w-[6rem]">
-        <div class="text-7xl aspect-square perfect-center font-mono">🙋</div>
-        Review Questions
-    </a>
+    <IconFile href="0?studyMode=Mistakes" emoji="💯" title="Review Mistakes" />
+    <IconFile href="0?studyMode=Questions" emoji="🙋" title="Review Questions" />
     {#each Object.keys(fileSubstruct) as folder}
-        <a href={path.join("/", base, $page.params.path, folder)} class="text-center w-[6rem]">
-            <div class="text-7xl aspect-square perfect-center font-mono">📁</div>
-            {folder}
-        </a>
+        <IconFile href={folder} emoji="📁" title={folder} />
     {/each}
     {#each ($files ?? []) as file (file.id)}
         <FileComponent {file} {deleteEnabled} />
