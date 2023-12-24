@@ -1,5 +1,6 @@
 import Dexie, {type Table} from 'dexie';
 import * as path from "$lib/path";
+import isInt from "$lib/isInt";
 
 export enum RoiType {
   question,
@@ -80,9 +81,14 @@ export class Db extends Dexie {
       route = input;
     }
     const routeArr = path.resolve(route, basePath).split("/");
+    const name = routeArr.pop() as string;
+    if (routeArr.some(folder => isInt(folder))) {
+      alert("Folder cannot be only a number, might confuse with file.");
+      return -1;
+    }
     return db.files.add({
       attempts: [Db.newBlankAttempt()],
-      name: routeArr.pop() as string,
+      name,
       route: routeArr.join("/"),
       flagged: false,
     });
