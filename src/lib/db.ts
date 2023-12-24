@@ -58,8 +58,8 @@ export class Db extends Dexie {
   constructor() {
     super('MathMan');
     // Docs: https://dexie.org/docs/Version/Version.stores()#schema-syntax
-    this.version(32).stores({
-      files: '++id, parent, route',
+    this.version(33).stores({
+      files: '++id, route',
     });
   }
 
