@@ -3,6 +3,7 @@
   import {liveQuery, type Observable} from "dexie";
   import {db, type FileSlim} from "$lib/db";
   import {page} from "$app/stores";
+  import {searchSet} from "$lib";
 
   enum StudyMode {
     Work = "Work",
@@ -13,7 +14,8 @@
   export let problemRoute: string;
   export let problemId: number;
 
-  let studyMode = StudyMode.Work;
+  let studyMode = $page.url.searchParams.get("studyMode") as StudyMode ?? StudyMode.Work;
+  $: searchSet("studyMode", studyMode);
   let flagged = false;
   let fileName: string;
   $: db.files.get(problemId).then(file => {
