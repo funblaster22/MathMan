@@ -1,0 +1,1 @@
+import{L as n}from"../chunks/layout.2e5632ea.js";const o=({params:e})=>({problemId:Number.parseInt(e.problemId)}),r=Object.freeze(Object.defineProperty({__proto__:null,load:o},Symbol.toStringTag,{value:"Module"}));export{n as component,r as universal};
