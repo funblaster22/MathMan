@@ -1,6 +1,7 @@
 <script lang="ts">
   import { base } from "$app/paths";
   import path from "path"
+  import {page} from "$app/stores";
 
   export let fileStruct: FileStructure;
   export let indentLevel = 0;
@@ -8,7 +9,9 @@
 </script>
 
 {#each Object.keys(fileStruct ?? {}) as subStruct}
-    <!-- substr(1) removes duplicate // caused by "" route -->
-    <a href={path.join("/", base, fullPath, subStruct)} style:padding-left={indentLevel * 15 + "px"} class="w-full block text-left">{subStruct || "/"}</a>
-    <svelte:self fileStruct={fileStruct[subStruct]} indentLevel={indentLevel + 1} fullPath={path.join(fullPath, subStruct)} />
+    {@const myFullPath = path.join(fullPath, subStruct)}
+    <a class:font-bold={myFullPath === ($page.params.path || ".")}
+       href={path.join("/", base, myFullPath)} style:padding-left={indentLevel * 15 + "px"}
+       class="w-full block text-left font-bold">{subStruct || "/"}</a>
+    <svelte:self fileStruct={fileStruct[subStruct]} indentLevel={indentLevel + 1} fullPath={myFullPath} />
 {/each}
