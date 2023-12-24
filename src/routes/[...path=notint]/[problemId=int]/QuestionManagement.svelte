@@ -99,7 +99,7 @@
 <!-- TODO: this for some reason only properly loads on reload -->
 <select on:change={changeQuestion}>
     {#each questionsFiltered as question, idx (question.id)}
-        <option value={idx} selected={question.name === fileName}>{question.name}</option>
+        <option value={idx} selected={question.id === problemId}>{question.name}</option>
     {/each}
 </select>
 <button on:click={nextQuestion}>➡️</button>
