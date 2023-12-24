@@ -14,8 +14,11 @@
   export let problemRoute: string;
   export let problemId: number;
 
+  let questionIndex = 0;
+  $: questionIndex = Math.max(0, questionsFiltered.findIndex(q => q.id === problemId));
+  $: goto(String(questionsFiltered[questionIndex]?.id ?? 0));
   let studyMode = $page.url.searchParams.get("studyMode") as StudyMode ?? StudyMode.Work;
-  $: searchSet("studyMode", studyMode);
+  // $: searchSet("studyMode", studyMode);  TODO: overwrites questionIndex goto
   let flagged = false;
   let fileName: string;
   $: db.files.get(problemId).then(file => {
@@ -24,13 +27,12 @@
   });
 
   function changeQuestion(ev: Event) {
-    const newId = (ev.target as HTMLSelectElement).value;
-    goto(newId);
+    questionIndex = Number.parseInt((ev.target as HTMLSelectElement).value);
   }
 
   function nextQuestion() {
-    switch (studyMode) {
-      case StudyMode.Work:
+    if (++questionIndex >= questionsFiltered.length) {
+      if (studyMode === StudyMode.Work) {
         const numberMatch = Array.from(fileName.matchAll(/\d+/g)).at(-1);
         let newFilename: string | undefined;
         if (numberMatch != undefined)
@@ -42,6 +44,10 @@
         db.newFile({basePath: $page.params.path, route: newFilename}).then(id => {
           if (id >= 0) goto(String(id))
         });
+      } else {
+        alert("Hooray! You are done!");
+        questionIndex--;
+      }
     }
   }
 
@@ -92,8 +98,8 @@
 </select>
 <!-- TODO: this for some reason only properly loads on reload -->
 <select on:change={changeQuestion}>
-    {#each questionsFiltered as question}
-        <option value={question.id} selected={question.name === fileName}>{question.name}</option>
+    {#each questionsFiltered as question, idx (question.id)}
+        <option value={idx} selected={question.name === fileName}>{question.name}</option>
     {/each}
 </select>
 <button on:click={nextQuestion}>➡️</button>

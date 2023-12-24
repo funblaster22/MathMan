@@ -19,14 +19,17 @@
 
   setContext("eraserEnabled", eraserEnabled);
 
-  const problemId = derived(page, $page => Number.parseInt($page.params.problemId));
+  const problemId = derived(page, $page => $page.data.problemId);
   const attemptId = derived(page, $page => Number.parseInt($page.url.searchParams.get('attempt') ?? "1") - 1);
   let fileRoute: string;
 
+  /**
+   * Ensures `file.route` is a child of `page.params.path`. If not, modify URL so that it is
+   * @param file attempt at retrieving `File` for prop `problemId`. If undefined, go back to file explorer.
+   * EXCEPTION: problemId == 0, do nothing & let `QuestionManagement` deal with it b/c using a non-work study mode
+   */
   function enforceCorrectUrl(file: File | undefined) {
-    // rectify invalid states.
-    // Fetch entry for problemId
-    // If entry exists and params.path != entry.route, change URL to file.route
+    if ($problemId === 0) return;
     if (file) {
       fileRoute = file.route;
       // Only check startsWith instead of full equality b/c can be incomplete when recursively reviewing a folder.
@@ -40,11 +43,7 @@
     }
   }
 
-  $: {
-    if (typeof window !== "undefined") {
-      db.files.get($problemId).then(enforceCorrectUrl);
-    }
-  }
+  $: db.files.get($problemId).then(enforceCorrectUrl);
 </script>
 
 <svelte:head>

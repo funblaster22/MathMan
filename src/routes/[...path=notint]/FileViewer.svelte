@@ -30,6 +30,16 @@
 </script>
 
 <div class="flex flex-wrap justify-evenly gap-3">
+    <!-- TODO: make these both components? They would be pretty small though -->
+    <!-- Use id 0 for unknown since -1 is not recognised by my parser & 0 should never be a key -->
+    <a href={path.join("/", base, $page.params.path, "0?studyMode=Mistakes")} class="text-center w-[6rem]">
+        <div class="text-7xl aspect-square perfect-center font-mono">💯</div>
+        Review Mistakes
+    </a>
+    <a href={path.join("/", base, $page.params.path, "0?studyMode=Questions")} class="text-center w-[6rem]">
+        <div class="text-7xl aspect-square perfect-center font-mono">🙋</div>
+        Review Questions
+    </a>
     {#each Object.keys(fileSubstruct) as folder}
         <a href={path.join("/", base, $page.params.path, folder)} class="text-center w-[6rem]">
             <div class="text-7xl aspect-square perfect-center font-mono">📁</div>
