@@ -4,10 +4,13 @@
   import path from "path";
   import {base} from "$app/paths";
   import {page} from "$app/stores";
+  import FileTitle from "./FileTitle.svelte";
+  import {getContext} from "svelte";
 
   export let file: File;
   export let deleteEnabled: Writable<boolean>;
 
+  const renameEnabled = getContext<Writable<boolean>>("renameEnabled")
   const href = path.join("/", base, $page.params.path, file.id!.toString());
 
   /** Retrieve date of most recent attempt in given `file` */
@@ -65,7 +68,10 @@
         </a>
         <button class="attempt-dropdown" title="Show attempts" on:click={auxButtonClicked.bind(this, file.id)}>{$deleteEnabled ? "🗑️" : "🔻"}</button>
     </div>
-    <a {href}><div>{file.flagged ? (new Date().getMonth() === 5 ? "🏳️‍🌈 " : "🚩 ") : ""}{file.name}</div></a>
+    <FileTitle
+        {href}
+        on:change={ev => db.files.update(file.id, {name: ev.target.value})}
+        value={((file.flagged && !$renameEnabled) ? (new Date().getMonth() === 5 ? "🏳️‍🌈 " : "🚩 ") : "") + file.name} />
 </div>
 
 <style>

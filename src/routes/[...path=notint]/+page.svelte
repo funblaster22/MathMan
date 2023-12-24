@@ -8,19 +8,23 @@
   import {goto} from "$app/navigation";
   import path from "path";
   import {base} from "$app/paths";
+  import {setContext} from "svelte";
 
   let fileStruct: FileStructure = {};
   const deleteEnabled = writable(false);
+  const renameEnabled = writable(false);
+  setContext("renameEnabled", renameEnabled);
   const paths = liveQuery(() =>
-    db.files.orderBy('route').uniqueKeys() as Promise<string[]>
+    db.files.orderBy('route').uniqueKeys() as Promise<string[] | undefined>
   );
 
-  async function makeFileStruct(paths: string[]) {
+  function makeFileStruct(paths: string[]) {
     const fileStruct: FileStructure = {"": {}};
 
     for (const path of paths) {
       let workingDir = fileStruct[""];
       for (const folder of path.split("/")) {
+        if (folder.length === 0) break;  // Top-level files can add another root folder, so ignore them
         if (!(folder in workingDir))
           workingDir[folder] = {};
         workingDir = workingDir[folder];
@@ -30,7 +34,7 @@
     return fileStruct;
   }
 
-  $: makeFileStruct($paths).then(struct => fileStruct = struct);
+  $: fileStruct = makeFileStruct($paths ?? [])
 </script>
 
 <svelte:head>
@@ -40,6 +44,7 @@
 <div id="grid">
     <div id="ribbon" class="text-right">
         <button on:click={() => goto(path.join("/", base, ...$page.data.path.slice(0, -1)))}>🆙📁</button>
+        <button on:click={() => $renameEnabled = !$renameEnabled}>✏️ rename</button>
         <button on:click={() => $deleteEnabled = !$deleteEnabled}>🗑️ file</button>
         <button on:click={() => db.newFile({basePath: $page.params.path})}>➕ file</button>
     </div>
