@@ -9,7 +9,7 @@
   import {db, type File} from "$lib/db";
   import {goto} from "$app/navigation";
   import {base} from "$app/paths";
-  import path from "path";
+  import * as path from "$lib/path";
   import ProblemViewer from "./ProblemViewer.svelte";
   import {setContext} from "svelte";
 
@@ -54,8 +54,7 @@
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
 <div id="grid">
     <div id="breadcrumbs">
-        <!-- Remember, $page.path does not include the id, so no extra work is needed -->
-        <a href={path.join("/", base, $page.params.path)}>🏠</a>
+        <a href={path.upCwd($page)}>🏠</a>
         {#each $page.params.path.split("/") as folder}
             <!-- TODO: each folder bring you back to the explorer -->
             /{folder}
