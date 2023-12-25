@@ -6,7 +6,6 @@
   import {writable} from "svelte/store";
   import {liveQuery} from "dexie";
   import * as path from "$lib/path";
-  import {base} from "$app/paths";
   import {setContext} from "svelte";
 
   let fileStruct: FileStructure = {};

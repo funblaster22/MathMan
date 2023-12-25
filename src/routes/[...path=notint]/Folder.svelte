@@ -1,8 +1,7 @@
 <script lang="ts">
   import {db} from "$lib/db";
-  import path from "path";
+  import * as path from "$lib/path";
   import {page} from "$app/stores";
-  import {base} from "$app/paths";
   import IconFile from "./IconFile.svelte";
   import FileTitle from "./FileTitle.svelte";
 
@@ -18,9 +17,8 @@
 </script>
 
 <IconFile href={folder} emoji="📁">
-    <!-- TODO: make extendCwd func using this implementation -->
     <FileTitle
-            href={path.join($page.data.path.at(-1) || base, folder)}
+            href={path.extendCwd($page, folder)}
             value={folder}
             on:change={renameFolder} />
 </IconFile>

@@ -2,8 +2,7 @@
     import Tool from "$lib/Tool";
     import type {Writable} from "svelte/store";
     import eraserUrl from "$lib/img/eraser.png"
-    import path from "path";
-    import {base} from "$app/paths";
+    import * as path from "$lib/path";
     import {page} from "$app/stores";
     import SelectorTool from "$lib/tools/SelectorTool.svelte";
     import MarkerTool from "$lib/tools/MarkerTool.svelte";
@@ -22,7 +21,7 @@
 
 <div id="tools">
     <SelectorTool />
-    <a href={path.join("/", base, "camera", $page.params.problemId)}>
+    <a href={path.absJoin("camera", $page.params.problemId)}>
         📷
     </a>
     <MarkerTool tool={Tool.Draw} filter="grayscale(1)" title="Your work" />

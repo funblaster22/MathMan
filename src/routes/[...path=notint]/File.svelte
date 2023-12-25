@@ -1,8 +1,7 @@
 <script lang="ts">
   import {db, Db, type File} from "$lib/db";
   import type {Writable} from "svelte/store";
-  import path from "path";
-  import {base} from "$app/paths";
+  import * as path from "$lib/path";
   import {page} from "$app/stores";
   import FileTitle from "./FileTitle.svelte";
   import {getContext} from "svelte";
@@ -11,7 +10,7 @@
   export let deleteEnabled: Writable<boolean>;
 
   const renameEnabled = getContext<Writable<boolean>>("renameEnabled")
-  const href = path.join("/", base, $page.params.path, file.id!.toString());
+  const href = path.extendCwd($page, file.id!.toString());
 
   /** Retrieve date of most recent attempt in given `file` */
   const recentestAttempt = (function(file: File) {

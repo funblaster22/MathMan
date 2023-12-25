@@ -4,6 +4,11 @@ import type {Page} from "@sveltejs/kit";
 
 export {join} from "path";
 
+/** Start with `/<base>`, join all arguments together, and normalize the resulting path. */
+export function absJoin(...paths: string[]) {
+  return path.join("/", base, ...paths);
+}
+
 // Node's path.resolve doesn't work b/c process.cwd undefined
 // Considered Deno functions, but that also is a bit of work https://deno.land/std@0.210.0/path/posix/mod.ts
 export function resolve(path: string, base: string = "") {

@@ -8,7 +8,6 @@
   import Attempts from "./Attempts.svelte";
   import {db, type File} from "$lib/db";
   import {goto} from "$app/navigation";
-  import {base} from "$app/paths";
   import * as path from "$lib/path";
   import ProblemViewer from "./ProblemViewer.svelte";
   import {setContext} from "svelte";
@@ -35,11 +34,11 @@
       // Only check startsWith instead of full equality b/c can be incomplete when recursively reviewing a folder.
       // This also means you can't depend on $page.params.path == problemId.route
       if (!fileRoute.startsWith($page.params.path)) {
-        goto(path.join("/", base, fileRoute, $page.params.problemId));
+        goto(path.absJoin(fileRoute, $page.params.problemId));
       }
     } else {
       // If entry doesn't exist, go back to file viewer (automatically making the file may be undesirable and collide w/ autoincr)
-      goto(path.join("/", base, $page.params.path));
+      goto(path.upCwd($page));
     }
   }
 

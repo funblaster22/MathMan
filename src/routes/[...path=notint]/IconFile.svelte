@@ -1,6 +1,5 @@
 <script lang="ts">
-  import path from "path";
-  import {base} from "$app/paths";
+  import * as path from "$lib/path";
   import {page} from "$app/stores";
 
   // Relative to `/base/$page.params.path`
@@ -9,7 +8,7 @@
   export let title: string | undefined;
 
   let fullHref: string;
-  $: fullHref = path.join("/", base, $page.params.path, href);
+  $: fullHref = path.absJoin($page.params.path, href);
 </script>
 
 <div class="text-center w-[6rem]">
