@@ -24,8 +24,8 @@
   let layers: CanvasRenderingContext2D[] = [];
 
   function updateCanvasSize() {
-    // neither Window nor IndexedDB is defined on server
-    if (typeof window === "undefined") return;
+    // neither Window nor IndexedDB is defined on server. ProblemId must also be defined
+    if (typeof window === "undefined" || problemId === 0) return;
     winWidth = window.innerWidth;
     winHeight = window.innerHeight;
     requestAnimationFrame(async () => {

@@ -16,7 +16,11 @@
 
   let questionIndex = 0;
   $: questionIndex = Math.max(0, questionsFiltered.findIndex(q => q.id === problemId));
-  $: goto(String(questionsFiltered[questionIndex]?.id ?? 0));
+  $: {
+    const newProblemId = questionsFiltered[questionIndex]?.id;
+    if (newProblemId)
+      goto(String(newProblemId));
+  }
   let studyMode = $page.url.searchParams.get("studyMode") as StudyMode ?? StudyMode.Work;
   // $: setSearch("studyMode", studyMode);  TODO: overwrites questionIndex goto
   let flagged = false;
