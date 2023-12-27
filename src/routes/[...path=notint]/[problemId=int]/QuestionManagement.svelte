@@ -19,10 +19,10 @@
   $: {
     const newProblemId = questionsFiltered[questionIndex]?.id;
     if (newProblemId)
-      goto(String(newProblemId));
+      // TODO: is there a better way? Causes extra state updates & janky history
+      goto(String(newProblemId) + setSearch("studyMode", studyMode));
   }
   let studyMode = $page.url.searchParams.get("studyMode") as StudyMode ?? StudyMode.Work;
-  // $: setSearch("studyMode", studyMode);  TODO: overwrites questionIndex goto
   let flagged = false;
   let fileName: string;
   $: db.files.get(problemId).then(file => {

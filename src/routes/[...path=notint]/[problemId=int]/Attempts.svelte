@@ -21,7 +21,7 @@
 
 <!-- TODO: I'm not sure why layout shifts when scrollbar present -->
 {#each $attempts ?? [] as attempt, idx ("" + problemId + idx)}
-    <button on:click={() => setSearch("attempt", String(idx + 1))}>
+    <button on:click={() => goto(setSearch("attempt", String(idx + 1)))}>
         <AttemptPreview {attempt} {idx} />
     </button>
 {/each}
