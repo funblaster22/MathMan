@@ -95,6 +95,7 @@
         id: file.id,
         route: file.route,
         name: file.name,
+        flagged: file.flagged,
         attempts: file.attempts.map(attempt => ({
           questions: attempt.questionCount,
           mistakes: attempt.mistakeCount
@@ -111,7 +112,7 @@
         questionsFiltered = qs.filter(question => question.route === problemRoute).sort((a, b) => a.name.localeCompare(b.name));
         break;
       case StudyMode.Mistakes:
-        questionsFiltered = qs.filter(question => question.attempts.at(-1)!.mistakes > 0);
+        questionsFiltered = qs.filter(question => question.attempts.at(-1)!.mistakes > 0 || question.flagged);
         break;
       case StudyMode.Questions:
         questionsFiltered = qs.filter(question => question.attempts.some(att => att.questions > 0));

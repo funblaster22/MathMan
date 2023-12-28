@@ -43,7 +43,7 @@ export interface File {
   flagged: boolean,
 }
 
-export interface FileSlim extends Pick<File, "id" | "name" | "route"> {
+export interface FileSlim extends Pick<File, "id" | "name" | "route" | "flagged"> {
   attempts: {
     questions: number,
     mistakes: number
