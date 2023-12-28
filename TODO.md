@@ -5,9 +5,9 @@ Priority (MVP):
         - Error mode (visit flags first, then in order of questions red writing)
         - Question mode (attempts w/ unresolved questions
         - Encode CWD in `path` param (doesn't need to match `fileId` path)
--[ ] Method to resolve questions
+-[x] Method to resolve questions
 -[x] File browser stats
-    - [Some algorithm](https://www.desmos.com/calculator/roffemagoj) that computes likelihood of making another mistake.
+    - [ ] [Some algorithm](https://www.desmos.com/calculator/roffemagoj) that computes likelihood of making another mistake.
     ```
     mistakes per attempt: 3, 2
     weights: .3, .7

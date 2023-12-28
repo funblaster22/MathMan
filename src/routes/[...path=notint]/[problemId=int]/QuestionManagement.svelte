@@ -118,8 +118,17 @@
         break;
     }
   }
+
+  function resolveQuestions() {
+    db.files.update(problemId, file => {file.attempts[attemptIdx].questionCount = 0});
+    nextQuestion();
+    // TODO: slightly breaks b/c file is immediately removed from list, but it's good enough. Maybe replace questionsFiltered effect with recompute on specific events (studyMode changed, +file && work mode)
+  }
 </script>
 
+{#if questionsFiltered[questionIndex]?.attempts?.[attemptIdx]?.questions > 0}
+    <button on:click={resolveQuestions}>🧠 Resolve questions</button>
+{/if}
 <button on:click={toggleFlag} title={(flagged ? "un" : "") + "flag for later"}>{flagged ? (new Date().getMonth() === 5 ? "🏳️‍🌈" : "🚩") : "🏳️"}</button>
 <select bind:value={studyMode}>
     {#each Object.keys(StudyMode) as mode}
