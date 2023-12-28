@@ -1,6 +1,6 @@
 Priority (MVP):
--[ ] Review functionality
-    -[ ] Next button
+-[x] Review functionality
+    -[x] Next button
         - Working mode (next or create)
         - Error mode (visit flags first, then in order of questions red writing)
         - Question mode (attempts w/ unresolved questions

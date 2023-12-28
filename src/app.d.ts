@@ -10,6 +10,8 @@ declare global {
 			path: string[],
 			/** Parsed integer `params.problemId` */
 			problemId: number,
+			/** Parsed, 0-indexed integer, search parameter `attempt`. Defaults to 0 */
+			attemptIdx: number,
 		}
 		// interface Platform {}
 	}

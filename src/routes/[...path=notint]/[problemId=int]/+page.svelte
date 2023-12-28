@@ -19,7 +19,7 @@
   setContext("eraserEnabled", eraserEnabled);
 
   const problemId = derived(page, $page => $page.data.problemId);
-  const attemptId = derived(page, $page => Number.parseInt($page.url.searchParams.get('attempt') ?? "1") - 1);
+  const attemptId = derived(page, $page => $page.data.attemptIdx);
   let fileRoute: string;
 
   /**

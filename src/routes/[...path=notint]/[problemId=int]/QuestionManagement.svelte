@@ -14,13 +14,16 @@
   export let problemRoute: string;
   export let problemId: number;
 
+  // 0-indexed. Should be -1 when switching to new question before proper attemptIdx calculated
+  let attemptIdx = -1;
+  $: attemptIdx = $page.data.attemptIdx;
   let questionIndex = 0;
   $: questionIndex = Math.max(0, questionsFiltered.findIndex(q => q.id === problemId));
   $: {
     const newProblemId = questionsFiltered[questionIndex]?.id;
     if (newProblemId)
       // TODO: is there a better way? Causes extra state updates & janky history
-      goto(String(newProblemId) + setSearch("studyMode", studyMode));
+      goto(String(newProblemId) + setSearch({studyMode: studyMode, attempt: String(attemptIdx + 1)}));
   }
   let studyMode = $page.url.searchParams.get("studyMode") as StudyMode ?? StudyMode.Work;
   let flagged = false;
@@ -32,10 +35,23 @@
 
   function changeQuestion(ev: Event) {
     questionIndex = Number.parseInt((ev.target as HTMLSelectElement).value);
+    attemptIdx = -1;
+    setAttemptIdx();
+  }
+
+  /** Return the next attempt index after current attempt that still has unanswered questions. If there are none, return -1 */
+  function findNextQuestion() {
+    return questionsFiltered[questionIndex].attempts.findIndex((attempt, idx) => attempt.questions > 0 && idx > attemptIdx);
   }
 
   function nextQuestion() {
-    if (++questionIndex >= questionsFiltered.length) {
+    const startingAttIdx = attemptIdx;
+    if (studyMode !== StudyMode.Questions || findNextQuestion() === -1) {
+      questionIndex++;
+      attemptIdx = -1;
+    }
+
+    if (questionIndex >= questionsFiltered.length) {  // At the end of questions list
       if (studyMode === StudyMode.Work) {
         const numberMatch = Array.from(fileName.matchAll(/\d+/g)).at(-1);
         let newFilename: string | undefined;
@@ -51,8 +67,18 @@
       } else {
         alert("Hooray! You are done!");
         questionIndex--;
+        attemptIdx = startingAttIdx;
+        return;
       }
     }
+
+    setAttemptIdx();
+  }
+
+  function setAttemptIdx() {
+    attemptIdx = studyMode == StudyMode.Questions ?
+      findNextQuestion()
+      : questionsFiltered[questionIndex].attempts.length - 1;
   }
 
   function toggleFlag() {
