@@ -56,7 +56,8 @@
         width: 100vw;
         max-width: 100vw !important;
         display: grid;
-        grid-template-columns: 300px 1fr;
+        /* TODO (low priority): use button to collapse/expand navigation on small devices */
+        grid-template-columns: min(300px, 39%) 1fr;
         grid-template-rows: 2em auto;
     }
 
