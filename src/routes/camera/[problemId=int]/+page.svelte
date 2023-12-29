@@ -2,9 +2,10 @@
   import {onDestroy, onMount} from "svelte";
   import {db} from "$lib/db";
   import {page} from "$app/stores";
+  import ResizeBox from "./ResizeBox.svelte";
 
   let video: HTMLVideoElement;
-  let roi: HTMLDivElement;
+  let size: [number, number];
 
   onMount(() => {
     navigator.mediaDevices
@@ -30,13 +31,24 @@
     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
     context.drawImage(video, 0, 0, width, height);
 
-    // TODO: this requires a redraw, which is expensive. I could probably do the nessisary math myself
-    const roiBox = roi.getBoundingClientRect();
+    const roiBox = calcCrop();
     const scaleFactor = width / window.innerWidth;
 
     const imgData = context.getImageData(roiBox.x * scaleFactor, roiBox.y * scaleFactor, roiBox.width * scaleFactor, roiBox.height * scaleFactor);
 
     db.files.update(Number.parseInt($page.params.problemId), {question: imgData}).then(() => history.back());
+  }
+
+  function calcCrop() {
+    const {clientWidth, clientHeight} = document.documentElement;
+    const cx = clientWidth / 2;
+    const cy = clientHeight * 0.3;
+    return {
+      x: Math.round(cx - size[0] / 2),
+      y: Math.round(cy - size[1] / 2),
+      width: size[0],
+      height: size[1],
+    }
   }
 </script>
 
@@ -47,7 +59,7 @@
 
 <!-- Crosshairs -->
 <div class="fixed w-full h-[60vh] inset-x-0 top-0 flex items-center justify-center">
-    <div bind:this={roi} class="resize overflow-auto border min-w-12 min-h-12"></div>
+    <ResizeBox bind:size />
 </div>
 
 <!-- Shutter -->
