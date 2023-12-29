@@ -1,0 +1,1 @@
+import{L as n}from"../chunks/layout.b3802d9a.js";const r=({params:e,url:t})=>({problemId:Number.parseInt(e.problemId),attemptIdx:Math.max(0,Number.parseInt(t.searchParams.get("attempt")??"1")-1)}),o=Object.freeze(Object.defineProperty({__proto__:null,load:r},Symbol.toStringTag,{value:"Module"}));export{n as component,o as universal};
