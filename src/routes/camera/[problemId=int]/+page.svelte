@@ -64,5 +64,6 @@
 
 <!-- Shutter -->
 <div class="fixed inset-x-0 bottom-12">
-    <button class="rounded-full bg-red-500 m-auto block w-12 h-12" on:click={takePicture}></button>
+    <!-- TODO: replace bg-gray-200 & all borders w/ theme-dependant color -->
+    <button class="rounded-full bg-gray-200 m-auto block w-12 h-12" on:click={takePicture}></button>
 </div>
