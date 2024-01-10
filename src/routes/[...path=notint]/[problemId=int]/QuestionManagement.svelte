@@ -3,7 +3,7 @@
   import {liveQuery, type Observable} from "dexie";
   import {db, type FileSlim} from "$lib/db";
   import {page} from "$app/stores";
-  import {setSearch} from "$lib";
+  import {setSearch, strNumSort} from "$lib";
 
   enum StudyMode {
     Work = "Work",
@@ -109,7 +109,7 @@
     const qs = $questions ?? [];
     switch (studyMode) {
       case StudyMode.Work:
-        questionsFiltered = qs.filter(question => question.route === problemRoute).sort((a, b) => a.name.localeCompare(b.name));
+        questionsFiltered = qs.filter(question => question.route === problemRoute).sort((a, b) => strNumSort(a.name, b.name));
         break;
       case StudyMode.Mistakes:
         questionsFiltered = qs.filter(question => question.attempts.at(-1)!.mistakes > 0 || question.flagged);
