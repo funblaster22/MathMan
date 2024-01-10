@@ -69,10 +69,6 @@
 </div>
 
 <style>
-    :root {
-        user-select: none;
-    }
-
     #grid {
         --safe-area-top: 20px;
         --safe-area-left: 0;
