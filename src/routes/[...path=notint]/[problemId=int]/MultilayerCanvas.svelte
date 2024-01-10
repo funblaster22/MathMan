@@ -123,5 +123,6 @@ Allowed to finish or draw over UI, so pointermove & pointerup bound at document 
         position: fixed;
         left: 0;
         right: 0;
+        touch-action: none;
     }
 </style>
