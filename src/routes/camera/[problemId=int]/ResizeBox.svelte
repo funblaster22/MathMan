@@ -3,19 +3,25 @@
 
   export let size: [number, number] = [170, 70];
 
-  function startDrag() {
+  let prevPointer: [number, number] = [0, 0];
+
+  function setPrevPointer(ev: MouseEvent) {
+    prevPointer[0] = ev.clientX;
+    prevPointer[1] = ev.clientY;
+  }
+
+  function startDrag(ev: PointerEvent) {
     document.onpointermove = drag;
     document.onpointerup = endDrag;
-    console.log("starting drag");
+    setPrevPointer(ev);
   }
   function drag(ev: PointerEvent) {
-    size[0] += ev.movementX;
-    size[1] += ev.movementY;
-    console.log(size, ev.movementX, ev.movementY);
+    size[0] += ev.clientX - prevPointer[0];
+    size[1] += ev.clientY - prevPointer[1];
+    setPrevPointer(ev);
   }
   function endDrag() {
     document.onpointermove = document.onpointerup = null;
-    console.log("drag stopped")
   }
 </script>
 
