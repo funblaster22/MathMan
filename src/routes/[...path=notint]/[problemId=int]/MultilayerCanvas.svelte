@@ -116,16 +116,13 @@
 <!-- Bind pointerdown here ensures you clicked canvas as opposed to UI.
 Allowed to finish or draw over UI, so pointermove & pointerup bound at document level -->
 <canvas bind:this={layers[Tool.Question]} width={winWidth} height={winHeight}
-        on:pointerdown={onpointerdown}></canvas>
+        on:pointerdown|preventDefault={onpointerdown}></canvas>
 
 <style>
     canvas {
         position: fixed;
         left: 0;
         right: 0;
-        touch-action: none;
-    }
-    :global(*) {
         touch-action: none;
     }
 </style>
