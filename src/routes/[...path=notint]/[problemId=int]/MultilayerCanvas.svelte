@@ -106,6 +106,8 @@
     window.addEventListener("resize", updateCanvasSize);
     document.addEventListener("pointermove", onpointermove);
     document.addEventListener("pointerup", onpointerup);
+    document.addEventListener('touchstart', ev => ev.preventDefault());
+    layers.forEach(layer => layer.addEventListener('touchstart', ev => ev.preventDefault()))
 
     layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
   });
