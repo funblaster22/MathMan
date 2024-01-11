@@ -6,6 +6,7 @@
   import FileComponent from "./File.svelte";
   import IconFile from "./IconFile.svelte";
   import Folder from "./Folder.svelte";
+  import {strNumSort} from "$lib";
 
   export let fileStruct: FileStructure;
   export let deleteEnabled: Writable<boolean>;
@@ -25,7 +26,7 @@
 
   let files: Observable<File[]>;
   $: files = liveQuery(() =>
-    db.files.where({route: $page.params.path}).toArray()
+    db.files.where({route: $page.params.path}).toArray().then(arr => arr.sort((a, b) => strNumSort(a.name, b.name)))
   );
 </script>
 
