@@ -6,13 +6,16 @@
   function startDrag() {
     document.onpointermove = drag;
     document.onpointerup = endDrag;
+    console.log("starting drag");
   }
   function drag(ev: PointerEvent) {
     size[0] += ev.movementX;
     size[1] += ev.movementY;
+    console.log(size, ev.movementX, ev.movementY);
   }
   function endDrag() {
     document.onpointermove = document.onpointerup = null;
+    console.log("drag stopped")
   }
 </script>
 
