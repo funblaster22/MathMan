@@ -107,7 +107,6 @@
     document.addEventListener("pointermove", onpointermove);
     document.addEventListener("pointerup", onpointerup);
     document.addEventListener('touchstart', ev => ev.preventDefault());
-    layers.forEach(layer => layer.addEventListener('touchstart', ev => ev.preventDefault()))
 
     layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
   });
@@ -125,6 +124,5 @@ Allowed to finish or draw over UI, so pointermove & pointerup bound at document 
         position: fixed;
         left: 0;
         right: 0;
-        touch-action: none;
     }
 </style>
