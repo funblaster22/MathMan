@@ -106,6 +106,7 @@
     window.addEventListener("resize", updateCanvasSize);
     document.addEventListener("pointermove", onpointermove);
     document.addEventListener("pointerup", onpointerup);
+    // VERY IMPORTANT to prevent iOS select left edge & magnifying glass when drawing
     layers.forEach(layer => (layer as HTMLCanvasElement).addEventListener('touchstart', ev => ev.preventDefault()))
 
     layers = layers.map(canvas => (canvas as HTMLCanvasElement).getContext('2d', {willReadFrequently: true}));
