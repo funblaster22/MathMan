@@ -125,7 +125,7 @@ Allowed to finish or draw over UI, so pointermove & pointerup bound at document 
         right: 0;
         touch-action: none;
     }
-    :global(body) {
+    :global(*) {
         touch-action: none;
     }
 </style>
