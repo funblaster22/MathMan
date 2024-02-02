@@ -29,7 +29,7 @@
   });
 </script>
 
-<div class="text-center bg-gray-50 rounded-md" style:width={size + "px"}>
+<div class="text-center bg-gray-50" style:width={size + "px"}>
     <canvas bind:this={canvas} width={size} height={size - 24}></canvas>
     Attempt {idx + 1}
 </div>

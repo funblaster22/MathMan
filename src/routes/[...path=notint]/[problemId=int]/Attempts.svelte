@@ -4,8 +4,12 @@
   import {liveQuery, type Observable} from "dexie";
   import {type Attempt, Db, db} from "$lib/db";
   import {setSearch} from "$lib";
+  import {derived} from "svelte/store";
+  import {page} from "$app/stores";
 
   export let problemId: number;
+
+  const curAttempt = derived(page, $page => $page.data.attemptIdx);
 
   let attempts: Observable<Attempt[]>;
   $: attempts = liveQuery(
@@ -21,7 +25,7 @@
 
 <!-- TODO: I'm not sure why layout shifts when scrollbar present -->
 {#each $attempts ?? [] as attempt, idx ("" + problemId + idx)}
-    <button on:click={() => goto(setSearch({attempt: String(idx + 1)}))}>
+    <button on:click={() => goto(setSearch({attempt: String(idx + 1)}))} class="rounded-md overflow-hidden" style:outline={idx === $curAttempt ? "0.25em solid #a400ff" : ""}>
         <AttemptPreview {attempt} {idx} />
     </button>
 {/each}
