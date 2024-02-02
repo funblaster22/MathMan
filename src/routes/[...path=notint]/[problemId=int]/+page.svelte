@@ -51,7 +51,7 @@
 
 <ProblemViewer problemId={$problemId} />
 <MultilayerCanvas {selectedTool} problemId={$problemId} attemptId={$attemptId} />
-<div id="grid">
+<div id="grid" class:selected={$selectedTool !== Tool.None}>
     <div id="breadcrumbs">
         <a href={path.upCwd($page)}>🏠</a>
         {#each $page.params.path.split("/") as folder}
@@ -84,6 +84,16 @@
         padding-top: env(safe-area-inset-top);
         grid-template-columns: 50vw auto min-content;
         grid-template-rows: var(--safe-area-top) auto var(--safe-area-bottom);
+        /*font-size: 18pt;*/
+    }
+
+    #grid.selected :not(#tools-container) {
+        display: none;
+    }
+
+    #question-management, #breadcrumbs {
+        /*padding: 1em;*/
+        font-size: 18pt;
     }
 
     #tools-container > :global(* > *),
