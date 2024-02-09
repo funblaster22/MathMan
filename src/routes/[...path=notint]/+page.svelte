@@ -40,7 +40,7 @@
 </svelte:head>
 
 <div id="grid">
-    <div id="ribbon" class="text-right">
+    <div id="ribbon" class="text-right text-[18pt]">
         <a href={path.upCwd($page)}>🆙📁</a>
         <button on:click={() => $renameEnabled = !$renameEnabled}>✏️ rename</button>
         <button on:click={() => $deleteEnabled = !$deleteEnabled}>🗑️ file</button>
