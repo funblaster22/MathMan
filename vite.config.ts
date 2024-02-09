@@ -33,4 +33,7 @@ export default defineConfig({
 			path: "path-browserify",
 		},
 	},
+	build: {
+		sourcemap: true,
+	},
 });
