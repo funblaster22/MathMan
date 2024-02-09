@@ -9,7 +9,8 @@
   }
   function drag(ev: PointerEvent) {
     size[0] = (ev.clientX - window.innerWidth / 2) * 2;
-    size[1] = (ev.clientY - window.innerHeight / 2) * 2;
+    // Idk why it's like this. Hard-coding 60vh
+    size[1] = (ev.clientY - (window.innerHeight * 0.6) / 2) * 2;
   }
   function endDrag() {
     document.onpointermove = document.onpointerup = null;
