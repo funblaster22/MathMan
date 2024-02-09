@@ -3,9 +3,12 @@
   import {db} from "$lib/db";
   import {page} from "$app/stores";
   import ResizeBox from "./ResizeBox.svelte";
+  import {isTouchEnabled} from "$lib";
 
   let video: HTMLVideoElement;
   let size: [number, number];
+  let placeBottom: boolean;
+  computePlacement();
 
   onMount(() => {
     navigator.mediaDevices
@@ -50,6 +53,10 @@
       height: size[1],
     }
   }
+
+  function computePlacement() {
+    placeBottom = window.innerWidth < window.innerHeight ? true : !isTouchEnabled();
+  }
 </script>
 
 <!-- Preview -->
@@ -63,7 +70,20 @@
 </div>
 
 <!-- Shutter -->
-<div class="fixed inset-x-0 bottom-12">
-    <!-- TODO: replace bg-gray-200 & all borders w/ theme-dependant color -->
-    <button class="rounded-full bg-gray-200 m-auto block w-12 h-12" on:click={takePicture}></button>
+<div class="fixed flex justify-center items-center" class:placeBottom class:placeRight={!placeBottom}>
+    <button class="rounded-full bg-orange-400 w-[5rem] h-[5rem]" on:click={takePicture}></button>
 </div>
+<svelte:window on:resize={computePlacement} />
+
+<style>
+    .placeBottom {
+        left: 0;
+        right: 0;
+        bottom: 3rem;
+    }
+    .placeRight {
+        top: 0;
+        bottom: 0;
+        right: 3rem;
+    }
+</style>

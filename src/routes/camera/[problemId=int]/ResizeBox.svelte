@@ -25,8 +25,8 @@
   }
 </script>
 
-<div class="relative overflow-auto border min-w-12 min-h-12" style:width={size[0] + "px"} style:height={size[1] + "px"}>
-    <div class="absolute right-0 bottom-0 w-5 h-5 bg-red-50 cursor-nw-resize" on:pointerdown={startDrag}></div>
+<div class="relative overflow-auto border min-w-12 min-h-12 border-orange-400" style:width={size[0] + "px"} style:height={size[1] + "px"}>
+    <div class="absolute right-0 bottom-0 w-5 h-5 bg-orange-400 cursor-nw-resize" on:pointerdown={startDrag}></div>
 </div>
 
 <style>

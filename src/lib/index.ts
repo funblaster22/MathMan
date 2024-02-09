@@ -27,3 +27,7 @@ export function strNumSort(a: string, b: string) {
     return abFloatDiff;
   return a.localeCompare(b);
 }
+
+export function isTouchEnabled() {
+  return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+}
