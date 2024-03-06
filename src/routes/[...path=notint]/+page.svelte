@@ -46,7 +46,7 @@
         <button on:click={() => $deleteEnabled = !$deleteEnabled}>🗑️ file</button>
         <button on:click={() => db.newFile({basePath: $page.params.path})}>➕ file</button>
     </div>
-    <div id="folders"><FileSidebar {fileStruct} /></div>
+    <div id="folders" class="overflow-y-auto"><FileSidebar {fileStruct} /></div>
     <div id="files"><FileViewer {fileStruct} {deleteEnabled} /></div>
 </div>
 
